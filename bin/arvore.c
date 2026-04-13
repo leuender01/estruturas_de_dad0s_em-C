@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 struct no{
     int value;
@@ -36,33 +37,41 @@ struct no* insertNode(struct no *node, int value,int* count){
     return node;
 }
 
-void insert(TREE tree,int value){
+bool insert(TREE tree,int value){
     int new_cont = 0;
     tree->node = insertNode(tree->node,value,&new_cont);
-    tree->nodes = tree->nodes + new_cont;
+    if(new_cont != 0){
+        tree->nodes = tree->nodes + new_cont;
+        return true;
+    }
+    return false;
 };
 
-void inorderBFS(struct no *node){
-    if(node->left != NULL) inorderBFS(node->left);
-    printf("%d\n",node->value);
-    if(node->right != NULL) inorderBFS(node->right);
+void inorderDFS(struct no *node){
+    if(node->left != NULL) inorderDFS(node->left);
+    printf(", %d",node->value);
+    if(node->right != NULL) inorderDFS(node->right);
     return;
 };
 
 void inorder(TREE tree){
     struct no *node = tree->node;
-    inorderBFS(node);
+    printf("inorder>>");
+    inorderDFS(node);
+    printf("\n");
 };
-void preorderBFS(struct no *node){
-    if(node->left != NULL) preorderBFS(node->left);
-    if(node->right != NULL) preorderBFS(node->right);
-    printf("%d\n",node->value);
+void preorderDFS(struct no *node){
+    printf(", %d",node->value);
+    if(node->left != NULL) preorderDFS(node->left);
+    if(node->right != NULL) preorderDFS(node->right);
     return;
 };
 
 void preorder(TREE tree){
     struct no *node = tree->node;
-    preorderBFS(node);
+    printf("preorder>>");
+    preorderDFS(node);
+    printf("\n");
 };
 
 int BinarySearchBFS(struct no *node,int arg,int result){
@@ -85,30 +94,70 @@ void freenode(struct no *node){
     freenode(node->right);
     free(node);
     printf("no limpo\n");
+    return;
 }
 
-void freeTree(TREE tree){
+bool freeTree(TREE tree){
     freenode(tree->node);
     free(tree);
     printf("arvore limpa\n");
+    return true;
 };
 
-struct no* removeNodeDfs(struct no *node, int arg){
-    if(node->value == arg){
-        if(node->left == NULL && node->right == NULL){
-            node = NULL;
+bool max(TREE tree){
+    if(tree == NULL) return false;
+    struct no *aux = tree->node;
+    while(aux->right != NULL) aux = aux->right;
+    if(aux == NULL) return false;
+    printf("%d\n", aux->value);    
+    return true;    
+}
+
+bool min(TREE tree){
+    if(tree == NULL) return false;
+    struct no *aux = tree->node;
+    while(aux->left != NULL) aux = aux->left;
+    if(aux == NULL) return false;
+    printf("%d\n", aux->value);    
+    return true;    
+}
+int _min(struct no *aux){
+    if(aux == NULL) return -1;
+    while(aux->left != NULL) aux = aux->left;   
+    return aux->value;    
+}
+
+struct no* removeNodeDfs(struct no *node, int arg, TREE len){
+    if(node == NULL) return NULL;
+    if(arg < node->value && node->left != NULL){
+        node->left = removeNodeDfs(node->left,arg,len);
+    }else if(arg > node->value && node->right != NULL){
+        node->right = removeNodeDfs(node->right,arg,len);
+    }else if(node->value == arg){
+        if(node->left == NULL){
+            struct no *temp = node->right;
             free(node);
-            printf("ok\n");
+            len->nodes--;
+            return temp;
+        }else if(node->right == NULL){
+            struct no *temp = node->left;
+            free(node);
+            len->nodes--;
+            return temp;
+        }else{
+            int aux = _min(node->right);
+            if(aux == -1) return node;
+            node->value = aux;
+            node->right = removeNodeDfs(node->right, aux,len);    
         };
-        return node;
     };
-    if(arg < node->value && node->left != NULL) node->left = removeNodeDfs(node->left,arg);
-    if(arg > node->value && node->right != NULL) node->right = removeNodeDfs(node->right,arg);
     return node;
 }
 
-void removeNode(TREE tree, int arg){
-   tree->node = removeNodeDfs(tree->node, arg);
+bool removeNode(TREE tree, int arg){
+    int old_size = tree->nodes;
+    tree->node = removeNodeDfs(tree->node, arg,tree);
+    return !(tree->nodes == old_size);
 };
 
 int main(void){
@@ -117,14 +166,24 @@ int main(void){
     tree = init(tree);
     insert(tree,2);
     insert(tree,5);
+    insert(tree,4);
     insert(tree,10);
     insert(tree,1);
-    removeNode(tree,1);
+    insert(tree,0);
+    //max(tree);
+    //min(tree);
     inorder(tree);
     preorder(tree);
+    removeNode(tree, 5);
+    inorder(tree);
+    preorder(tree);
+    /*//inorder(tree);
     a = BinarySearch(tree, 1);
+    //preorder(tree);
     printf("%d, %d\n",tree->nodes,a);
+    */
     freeTree(tree);
 
     return 0;
 };
+
