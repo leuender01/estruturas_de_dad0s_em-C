@@ -3,29 +3,22 @@
 CC= clang
 FLAG= -Wall
 CMD= clear
+OBJ_DIR= ./objects
+BIN_DIR= ./bin
+COD_DIR= ./codigo-fonte
+HEADER= data.h ## arquivo de cabeçalho
+OBJ= enums.o  ## arquivo objeto
+COD= enums.c  ## deficnir codigo fonte
 
-#======Compila=Principal=====
+#======Codigo-principal======
+enum: $(OBJ_DIR)/$(OBJ) bash
+	$(CC) $(FLAG) $(OBJ_DIR)/$(OBJ) $(COD_DIR)/main.c -o $(BIN_DIR)/program
 
-enum: enums.o
+$(OBJ_DIR)/$(OBJ): $(COD_DIR)/$(COD) $(COD_DIR)/$(HEADER)
+	$(CC) $(FLAG) -c $(COD_DIR)/$(COD) -o $(OBJ_DIR)/$(OBJ)
 
-	$(CC) $(FLAG) enums.o main.c -o enum
+clean: 
+	rm $(OBJ_DIR)/*.o
 
-#====Cria_As_Dependencias=====
-enum.o: data.h
-
-	$(CC) $(FLAG) -c enums.c
-
-#===Remove=Arquivos=Objetos===
-
-clean:
-	rm -rf *.o
-
-#===========COMODISMO==========
-
-build: clean enum run
-
-#===========Executa============
-
-run:
-	$(CMD)
-	./enum
+bash: 
+	./verificar.sh
