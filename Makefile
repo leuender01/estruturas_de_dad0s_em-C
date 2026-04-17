@@ -6,26 +6,19 @@ CMD= clear
 OBJ_DIR= ./objects
 BIN_DIR= ./bin
 COD_DIR= ./codigo-fonte
-MAIN= main.c ## a onde vai rodar
-BIN= merge_sort ## nome do binario
-HEADER= merge_sort.h ## arquivo de cabeçalho
-OBJ= merge_sort.o  ## arquivo objeto
-COD= merge_sort.c  ## deficnir codigo fonte
+BIN= arvore
+HEADER= $(COD_DIR)/arvore-de-busca-AVL.h
+SOURCE= $(COD_DIR)/arvore-binaria-de-busca.c $(COD_DIR)/arvore-de-busca-AVL.c
 
-#======Codigo-principal======
-all: $(OBJ_DIR)/$(OBJ) bash
-	$(CC) $(FLAG) $(OBJ_DIR)/$(OBJ) $(COD_DIR)/$(MAIN) -o $(BIN_DIR)/$(BIN)
+OBJ := $(addprefix $(OBJ_DIR)/, $(notdir $(SOURCE:.c=.o)))
 
-$(OBJ_DIR)/$(OBJ): $(COD_DIR)/$(COD) $(COD_DIR)/$(HEADER)
-	$(CC) $(FLAG) -c $(COD_DIR)/$(COD) -o $(OBJ_DIR)/$(OBJ)
+all: $(OBJ)
+	$(CC) $(FLAG) $(OBJ) $(COD_DIR)/main.c -o $(BIN_DIR)/$(BIN)
 
-clean: 
-	rm $(OBJ_DIR)/*.o
 
-build: clean all run
-	
-bash: 
-	./verificar.sh
+$(OBJ_DIR)/%.o: $(COD_DIR)/%.c $(HEADER)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) -c $< -o $@
 
 run:
 	$(BIN_DIR)/$(BIN)

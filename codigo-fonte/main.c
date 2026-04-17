@@ -1,10 +1,30 @@
 #include <stdio.h>
-#include "merge_sort.h"
+#include <stdlib.h>
+#include "arvore-de-busca-AVL.h"
 
 int main(void){
-    int array[20]={
-        24,32,10,2,61,5,3,2,56,4,5,23,45,542,0,90,36,81,21,42
-    };
-    int len = sizeof(array)/ sizeof(array[0]);
-    merge_sort(array, 0, len - 1);
+    TREE tree;
+    int a;
+    tree = init(tree);
+    insert(tree,2);
+    insert(tree,5);
+    insert(tree,4);
+    insert(tree,10);
+    insert(tree,1);
+    insert(tree,0);
+    //max(tree);
+    //min(tree);
+    inorder(tree);
+    preorder(tree);
+    removeNode(tree, 5);
+    inorder(tree);
+    preorder(tree);
+    /*//inorder(tree);
+    a = BinarySearch(tree, 1);
+    //preorder(tree);
+    printf("%d, %d\n",tree->nodes,a);
+    */
+    freeTree(tree);
+
+    return 0;
 }

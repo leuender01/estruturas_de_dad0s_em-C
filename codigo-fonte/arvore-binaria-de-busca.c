@@ -1,27 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "arvore-binaria-de-busca.h"
 #include <stdbool.h>
-
-struct no{
-    int value;
-    struct no *left;
-    struct no *right;
-};
-
-struct ArvoreBinariaBusca{
-    int nodes;
-    struct no *node;
-};
-
-typedef struct ArvoreBinariaBusca BinarySearchtree;
-typedef BinarySearchtree* TREE;
 
 TREE init(TREE tree){
     tree = malloc(sizeof(BinarySearchtree));
     tree->nodes = 0;
     tree->node = NULL;
     return tree;
-};
+}
 
 struct no* insertNode(struct no *node, int value,int* count){
     if(node == NULL){
@@ -45,41 +32,42 @@ bool insert(TREE tree,int value){
         return true;
     }
     return false;
-};
+}
 
 void inorderDFS(struct no *node){
     if(node->left != NULL) inorderDFS(node->left);
     printf(", %d",node->value);
     if(node->right != NULL) inorderDFS(node->right);
     return;
-};
+}
 
 void inorder(TREE tree){
     struct no *node = tree->node;
     printf("inorder>>");
     inorderDFS(node);
     printf("\n");
-};
+}
+
 void preorderDFS(struct no *node){
     printf(", %d",node->value);
     if(node->left != NULL) preorderDFS(node->left);
     if(node->right != NULL) preorderDFS(node->right);
     return;
-};
+}
 
 void preorder(TREE tree){
     struct no *node = tree->node;
     printf("preorder>>");
     preorderDFS(node);
     printf("\n");
-};
+}
 
 int BinarySearchBFS(struct no *node,int arg,int result){
     if(node->value == arg) return node->value;
     if(arg < node->value && node->left != NULL) result = BinarySearchBFS(node->left,arg,result);
     if(arg > node->value && node->right != NULL) result = BinarySearchBFS(node->right,arg,result);
     return result;
-};
+}
 
 int BinarySearch(TREE tree, int arg){
     int result = 0;
@@ -87,7 +75,7 @@ int BinarySearch(TREE tree, int arg){
     result = BinarySearchBFS(tree->node, arg,result);
     if(result == diff) printf("nao esta\n");
     return result;
-};
+}
 void freenode(struct no *node){
     if(node == NULL) return;
     freenode(node->left);
@@ -102,7 +90,7 @@ bool freeTree(TREE tree){
     free(tree);
     printf("arvore limpa\n");
     return true;
-};
+}
 
 bool max(TREE tree){
     if(tree == NULL) return false;
@@ -158,32 +146,7 @@ bool removeNode(TREE tree, int arg){
     int old_size = tree->nodes;
     tree->node = removeNodeDfs(tree->node, arg,tree);
     return !(tree->nodes == old_size);
-};
+}
 
-int main(void){
-    TREE tree;
-    int a;
-    tree = init(tree);
-    insert(tree,2);
-    insert(tree,5);
-    insert(tree,4);
-    insert(tree,10);
-    insert(tree,1);
-    insert(tree,0);
-    //max(tree);
-    //min(tree);
-    inorder(tree);
-    preorder(tree);
-    removeNode(tree, 5);
-    inorder(tree);
-    preorder(tree);
-    /*//inorder(tree);
-    a = BinarySearch(tree, 1);
-    //preorder(tree);
-    printf("%d, %d\n",tree->nodes,a);
-    */
-    freeTree(tree);
 
-    return 0;
-};
 
