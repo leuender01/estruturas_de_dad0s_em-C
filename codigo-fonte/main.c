@@ -6,23 +6,25 @@
 int main(void){
     
     TREE tree = NULL;
-    int i, min = 1, max = 100;
-    int teste[20];
+    //int i, min = 1, max = 100;
+    //int teste[20];
+    int testeAvl[7] = {1,2,3,4,5,6,7};
     tree = init(tree);
     
     srand(time(NULL)); 
-    for(i = 0; i < 20; i++) {
+    for(int i = 0; i < 7; i++) {
         // Gera numero entre 1 e 100
-        int num = (rand() % (max - min + 1)) + min;
-        teste[i]= num;
-        insert(tree,num);
+        //int num = (rand() % (max - min + 1)) + min;
+        //teste[i]= num;
+        insert(tree,testeAvl[i]);
     }
 
     inorder(tree);
     printf("size = %d\n",height(tree));
     preorder(tree);
-    for(int j = 0; j < 20; j++) printf("%d, ", teste[j]);
     printf("\n");
+    rotate(tree);
+    //for(int j = 0; j < 20; j++) printf("%d, ", teste[j]);
     //preorder(tree);
     //porlevel(tree);
     /*

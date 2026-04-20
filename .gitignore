@@ -4,3 +4,5 @@
 *.py
 *.tar.gz
 *.su
+.vscode
+/bin
