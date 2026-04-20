@@ -8,7 +8,7 @@
     arvore binaria sendo dependente dela.
 */
 
-void rotate(void);
+void rotate(TREE tree);
 
 
 #endif
