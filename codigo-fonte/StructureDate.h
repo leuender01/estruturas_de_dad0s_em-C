@@ -16,13 +16,4 @@ int peekStack(Stack *p);
 
 //------------Queue-----------------
 
-typedef struct Element{int date; struct Element *prox;} Element;
-typedef struct{ int size; Element *tail; Element *front;} Queue;
-void newQueue(Queue *p);
-int empytQueue(Queue *p);
-int isFullQueue(Queue *p);
-void Enqueue(Queue *p, int value);
-int Dequeue(Queue *p);
-int peekQueue(Queue *p);
-
 #endif

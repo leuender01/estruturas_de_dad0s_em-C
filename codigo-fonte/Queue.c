@@ -1,26 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "StructureDate.h"
+#include <stdbool.h>
+#include "Queue.h"
 
-void newQueue(Queue *p){
+/*
+	Nao e nada muito rebuscado mais ate agora ta funcionando.
+*/
+
+bool newQueue(Queue *p){
+	
+	/*
+		Inicializa a Fila.
+	*/
+
 	p->tail = NULL;
 	p->front = NULL;
 	p->size = 0;
+	return true; // retorna true porque eu quis
 };
-int empytQueue(Queue *p){
-	return p->size == 0;
+
+bool empytQueue(Queue *p){
+
+	/*
+		Verifica se esta vazia, pode ser descartada.
+	*/
+
+	return (p->size == 0);
 };
-int isFullQueue(Queue *p){
-	return p->size == TAM_MAX;
+bool isFullQueue(Queue *p){
+
+	/*
+		Verifica se esta cheia, pode ser descartada.
+	*/
+
+	return (p->size == TAM_MAX);
 };
-void Enqueue(Queue *p, int value){
-	if(!isFullQueue){
+
+bool Enqueue(Queue *p, struct no* node){
+
+	/*
+		Insere um elemento e como so estivesse em
+	*/
+	if(isFullQueue(p)){
 		printf("Queue is Full\n");
-		return;
+		return false;
 	};
 	Element *novo = (Element*)malloc(sizeof(Element));
 	if(novo){
-		novo->date = value;
+		novo->node = node;
 		novo->prox = NULL;
 		if(p->front == NULL){ 
 			p->front = novo;
@@ -32,24 +59,25 @@ void Enqueue(Queue *p, int value){
 		}else{
 			printf("memory Error\n");
 		};
+		return true;
 };
-int Dequeue(Queue *p){
+struct no * Dequeue(Queue *p){
 	if(empytQueue(p)){
 		printf("Queue is empyt\n");
-		return -1;
+		return NULL;
 	};
 	Element *temp = p->front;
-	int value = temp->date;
+	struct no* node = temp->node;
 	p->front = p->front->prox;
 	if(p->front == NULL){
 		p->tail =NULL;
 	};
 	free(temp);
 	p->size--;
-	return value;
+	return node;
 
 };
-int peekQueue(Queue *p){
-	if(p->front == NULL) return -1;
-	return p->front->date;
+struct no * peekQueue(Queue *p){
+	if(p->front == NULL) return NULL;
+	return p->front->node;
 };
