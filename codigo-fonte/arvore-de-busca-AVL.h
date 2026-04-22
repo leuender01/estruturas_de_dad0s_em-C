@@ -7,8 +7,12 @@
     ser inserido como uma extenção da 
     arvore binaria sendo dependente dela.
 */
-
-void rotate(TREE tree);
-
+void rotate(TREE tree);//função que rotaciona a arvore ate ela ser balanceada
+int FB(struct no* node);//função que calcula o fator de balanceamento 
+struct no* balancear(struct no* node);//função que balanceia uma vez
+struct no* RSS(struct no* node);//função que rotaciona para esquerda
+struct no* RSD(struct no *node);//função que rotaciona para direita
+struct no* RDS(struct no* node);//função que rotaciona primerio para direita depois para esquerda
+struct no* RDD(struct no* node);//função que rotaciona primeiro para esquerda depois para direita
 
 #endif
