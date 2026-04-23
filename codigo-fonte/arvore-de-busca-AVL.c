@@ -15,7 +15,6 @@ void rotate(TREE tree){
         Função que fica em loop ate balancear a arvore por completo
     */
 
-
     struct no *node= tree->node;
     int fb = FB(node); 
     while(fb > 1 || fb < -1){

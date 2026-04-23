@@ -6,21 +6,26 @@ CMD= clear
 OBJ_DIR= ./objects
 BIN_DIR= ./bin
 COD_DIR= ./codigo-fonte
-BIN= arvoreAvl
-HEADER= $(COD_DIR)/arvore-de-busca-AVL.h
-SOURCE= $(COD_DIR)/arvore-binaria-de-busca.c $(COD_DIR)/arvore-de-busca-AVL.c $(COD_DIR)/Queue.c
-BUILD=  $(COD_DIR)/arvore-de-busca-AVL.c
+HEADER= 
+BIN= 
+SOURCE= 
 
-OBJ := $(addprefix $(OBJ_DIR)/, $(notdir $(SOURCE:.c=.o)))
+ARVORE_AVL_COD= $(COD_DIR)/arvore-binaria-de-busca.c $(COD_DIR)/arvore-de-busca-AVL.c $(COD_DIR)/Queue.c
+ARVORE_AVL_OBJ := $(addprefix $(OBJ_DIR)/, $(notdir $(ARVORE_AVL_COD:.c=.o)))
 
-all: $(OBJ) $(BIN_DIR)/$(BIN)
-	$(CC) $(FLAG) $(OBJ) $(COD_DIR)/main.c -o $(BIN_DIR)/$(BIN)
+
+arvore_avl: $(ARVORE_AVL_OBJ) $(BIN_DIR)/arvoreAvl
+	$(CC) $(FLAG) $(ARVORE_AVL_COD) $(COD_DIR)/teste_avl.c -o $(BIN_DIR)/arvoreAvl
 	./verificar.sh
+	./$(BIN_DIR)/arvoreAvl
 
 $(BIN_DIR)/$(BIN):
 	@mkdir -p $(BIN_DIR)
 
-$(OBJ_DIR)/%.o: $(COD_DIR)/%.c $(HEADER)
+$(BIN_DIR)/arvoreAvl:
+	@mkdir -p $(BIN_DIR)
+
+$(ARVORE_AVL_OBJ)/%.o: $(ARVORE_AVL_COD) $(COD_DIR)/arvore-de-busca-AVL.h
 	@mkdir -p $(OBJ_DIR)
 	$(CC) -c $< -o $@
 

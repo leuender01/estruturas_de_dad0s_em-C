@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "arvore-binaria-de-busca.h"
+#include "arvore-de-busca-AVL.h"// caso queira incluir rotaçoes na inserção da arvore binaria tem que incluir isso
 
 /*
     A Parte do codigo em si nao tem utilidade real apenas eu 
@@ -58,6 +59,7 @@ bool insert(TREE tree,int value){
 
     int new_cont = 0;
     tree->node = insertNode(tree->node,value,&new_cont);
+    rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
     if(new_cont != 0){
         tree->size = tree->size + new_cont;
         return true;
@@ -264,6 +266,7 @@ bool removeNode(TREE tree, int arg){
 
     int old_size = tree->size;
     tree->node = removeNodeDfs(tree->node, arg,tree);
+    rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
     return !(tree->size == old_size);
 }
 
