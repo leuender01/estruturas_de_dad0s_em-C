@@ -5,7 +5,7 @@
 
 
 int FB(struct no* node){
-    if(node == NULL) return 0;
+    if(node == NULL) return -1;
     return (heightDFS(node->left, 0) - 1) - (heightDFS(node->right, 0) - 1);
 }
 
@@ -46,24 +46,25 @@ struct no* balancear(struct no* node){
 struct no* RSD(struct no* node){
     if(node == NULL) return node;
 
-    struct no* temp = node;
-    node = node->left;
-    temp->left =  NULL;
-    node->right = temp;
+   struct no* temp = node->right;
+    struct no* noraiz = node->left;
+
+    noraiz->right = node;
+    node->left = temp;
     
-    return node;
+    return noraiz;
 }
 
 //rotação para esquerda <-------
 struct no* RSS(struct no *node){
     if(node == NULL) return node;
+    struct no* temp = node->left;
+    struct no* noraiz = node->right;
 
-    struct no* temp = node;
-    node = node->right;
-    temp->right = NULL;
-    node->left = temp;
+    noraiz->left = node;
+    node->right = temp;
     
-    return node;
+    return noraiz;
 }
 //rotação Direita-Esquerda <-------- ------>
 struct no* RDS(struct no* node){

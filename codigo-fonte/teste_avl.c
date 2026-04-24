@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <time.h>
 #include "arvore-de-busca-AVL.h"
+#include <string.h>
 
 int main(void){
     
     TREE tree = NULL;
     int min = 1, max = 200;
     //int teste[20];
-    int testeAvl[7] = {1,2,3,4,5,6,7};
-    int testeAvl2[7] = {4,3,2,1,5,6,7};
-    int testeAvl3[5] = {5,4,3,2,1};
+    //int testeAvl[7] = {1,2,3,4,5,6,7};
+    //int testeAvl2[7] = {4,3,2,1,5,6,7};
+    //int testeAvl3[5] = {5,4,3,2,1};
     tree = init(tree);
     
     srand(time(NULL)); 
@@ -26,7 +27,7 @@ int main(void){
     porlevel(tree);
     
     printf("fator balanceamneto %d\n" ,FB(tree->node));
-    printf("altura e igual a %d\n", height(tree));
+    printf("tem o total de %d niveis\n", height(tree));
     //printf("size = %d\n",height(tree));
     //for(int j = 0; j < 20; j++) printf("%d, ", teste[j]);
     //preorder(tree);
@@ -46,6 +47,7 @@ int main(void){
     //preorder(tree);
     printf("%d, %d\n",tree->nodes,a);
     */ 
+    getchar();
     freeTree(tree);
 
     return 0;

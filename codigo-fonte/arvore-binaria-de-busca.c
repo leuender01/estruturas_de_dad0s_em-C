@@ -45,6 +45,7 @@ struct no* insertNode(struct no *node, int value,int* count){
     }else if(value > node->value){
         node->right = insertNode(node->right, value, count);
     }; 
+    node = balancear(node);
     return node;
 }
 
@@ -59,7 +60,7 @@ bool insert(TREE tree,int value){
 
     int new_cont = 0;
     tree->node = insertNode(tree->node,value,&new_cont);
-    rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
+    //rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
     if(new_cont != 0){
         tree->size = tree->size + new_cont;
         return true;
@@ -254,6 +255,7 @@ struct no* removeNodeDfs(struct no *node, int arg, TREE len){
             node->right = removeNodeDfs(node->right, aux,len);    
         };
     };
+    node = balancear(node);
     return node;
 }
 
@@ -266,7 +268,6 @@ bool removeNode(TREE tree, int arg){
 
     int old_size = tree->size;
     tree->node = removeNodeDfs(tree->node, arg,tree);
-    rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
     return !(tree->size == old_size);
 }
 
@@ -292,6 +293,7 @@ void porlevel(TREE tree){
         if(aux->right) Enqueue(&fila, aux->right);       
         printf("%d, ",aux->value);
     }
+    
     printf("\n");
 }
 

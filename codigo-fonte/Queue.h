@@ -9,7 +9,7 @@
     espero que tenha ficado bom
 */
 
-#define TAM_MAX 100 //so um limite minimo mais pode ser estendito para mais
+#define TAM_MAX 1000 //so um limite minimo mais pode ser estendito para mais
 #include <stdlib.h> 
 #include <stdbool.h>
 #include "arvore-base.h" // essa e so uma adptação para usar em arvores binarias

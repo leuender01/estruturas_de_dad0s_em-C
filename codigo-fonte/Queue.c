@@ -57,21 +57,16 @@ bool Enqueue(Queue *p, struct no* node){
 		p->tail = novo;
 		p->size++;
 		}else{
-			printf("memory Error\n");
+			return false;
 		};
 		return true;
 };
 struct no * Dequeue(Queue *p){
-	if(empytQueue(p)){
-		printf("Queue is empyt\n");
-		return NULL;
-	};
+	if(empytQueue(p)) return NULL;
 	Element *temp = p->front;
 	struct no* node = temp->node;
 	p->front = p->front->prox;
-	if(p->front == NULL){
-		p->tail =NULL;
-	};
+	if(p->front == NULL) p->tail = NULL;
 	free(temp);
 	p->size--;
 	return node;

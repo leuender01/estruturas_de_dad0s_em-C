@@ -5,15 +5,6 @@
 
 void merge(int *array, int start,int meio ,int end)
 {  
-    printf("start=%d\n",start);
-    printf("end=%d\n",end);
-    printf("\n");
-    
-    for(register int i = start; i < end ; i++) printf("%d, ", array[i]);
-    printf("\n");
-    
-    getchar();
-    
     //começa a ordenação
     int i, j, k;
     int n1 = meio - start + 1;
@@ -50,10 +41,6 @@ void merge(int *array, int start,int meio ,int end)
     }
     free(L);
     free(R);
-    
-    getchar();
-    for(register int i = start; i < end ; i++) printf("%d, ", array[i]);
-    printf("\n");
     
     return;
 }
