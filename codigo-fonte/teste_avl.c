@@ -6,27 +6,30 @@
 int main(void){
     
     TREE tree = NULL;
-    //int i, min = 1, max = 100;
+    int min = 1, max = 200;
     //int teste[20];
     int testeAvl[7] = {1,2,3,4,5,6,7};
+    int testeAvl2[7] = {4,3,2,1,5,6,7};
+    int testeAvl3[5] = {5,4,3,2,1};
     tree = init(tree);
     
     srand(time(NULL)); 
-    for(int i = 0; i < 7; i++) {
-        // Gera numero entre 1 e 100
-        //int num = (rand() % (max - min + 1)) + min;
+    for(int i = 0; i < 25; i++) {
+        // Gera numero entre 1 e 200
+        int num = (rand() % (max - min + 1)) + min;
         //teste[i]= num;
-        insert(tree,testeAvl[i]);
+        insert(tree,num);
     }
 
     inorder(tree);
-    printf("size = %d\n",height(tree));
     preorder(tree);
-    printf("\n");
-    rotate(tree);
+    porlevel(tree);
+    
+    printf("fator balanceamneto %d\n" ,FB(tree->node));
+    printf("altura e igual a %d\n", height(tree));
+    //printf("size = %d\n",height(tree));
     //for(int j = 0; j < 20; j++) printf("%d, ", teste[j]);
     //preorder(tree);
-    //porlevel(tree);
     /*
     insert(tree,2);
     insert(tree,5);

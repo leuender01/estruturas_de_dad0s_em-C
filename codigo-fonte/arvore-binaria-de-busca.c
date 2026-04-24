@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "arvore-binaria-de-busca.h"
+#include "arvore-de-busca-AVL.h"// caso queira incluir rotaçoes na inserção da arvore binaria tem que incluir isso
 
 /*
     A Parte do codigo em si nao tem utilidade real apenas eu 
@@ -39,8 +40,11 @@ struct no* insertNode(struct no *node, int value,int* count){
         return node;
     };
 
-    if(value < node->value) node->left = insertNode(node->left, value, count);// Parte recursiva que usa a busca binaria 
-    if(value > node->value) node->right = insertNode(node->right, value, count);// Parte recursiva que usa a busca binaria 
+    if(value < node->value){
+        node->left = insertNode(node->left, value, count);
+    }else if(value > node->value){
+        node->right = insertNode(node->right, value, count);
+    }; 
     return node;
 }
 
@@ -55,6 +59,7 @@ bool insert(TREE tree,int value){
 
     int new_cont = 0;
     tree->node = insertNode(tree->node,value,&new_cont);
+    rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
     if(new_cont != 0){
         tree->size = tree->size + new_cont;
         return true;
@@ -125,8 +130,11 @@ int BinarySearchBFS(struct no *node,int arg,int result){
     */
 
     if(node->value == arg) return node->value;
-    if(arg < node->value && node->left != NULL) result = BinarySearchBFS(node->left,arg,result);
-    if(arg > node->value && node->right != NULL) result = BinarySearchBFS(node->right,arg,result);
+    if(arg < node->value && node->left != NULL){
+        result = BinarySearchBFS(node->left,arg,result);
+    }else if(arg > node->value && node->right != NULL){
+        result = BinarySearchBFS(node->right,arg,result);
+    };
     return result;
 }
 
@@ -139,9 +147,8 @@ int BinarySearch(TREE tree, int arg){
 
 
     int result = 0;
-    short int diff = result;
     result = BinarySearchBFS(tree->node, arg,result);
-    if(result == diff) printf("nao esta\n");
+    if(result != arg) printf("nao esta\n");
     return result;
 }
 
@@ -259,6 +266,7 @@ bool removeNode(TREE tree, int arg){
 
     int old_size = tree->size;
     tree->node = removeNodeDfs(tree->node, arg,tree);
+    rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
     return !(tree->size == old_size);
 }
 
@@ -270,7 +278,6 @@ void porlevel(TREE tree){
         por nivel, sendo dependente de outra 
         estrutura de dados chamado Fila.
     */
-
 
     if(tree == NULL) return;
     Queue fila;
@@ -296,9 +303,9 @@ int heightDFS(struct no* node, int len){
     */
 
     if(node == NULL) return len;
-    int left= 0, right = 0;
-    left = heightDFS(node->left, len++);
-    right = heightDFS(node->right, len++);
+    len++;
+    int left = heightDFS(node->left, len);
+    int right = heightDFS(node->right, len);
     if(left >= right) return left;
     return right;
 }
