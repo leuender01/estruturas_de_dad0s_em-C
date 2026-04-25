@@ -4,8 +4,8 @@
 #include <time.h>
 
 int main(void){
-    int min = 1, max = 200;
-    int teste[30];
+    int min = 1, max = 1000;
+    int teste[100];
     
     srand(time(NULL)); 
     for(int i = 0; i < (sizeof(teste)/4); i++) {

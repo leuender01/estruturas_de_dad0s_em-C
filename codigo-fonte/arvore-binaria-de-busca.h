@@ -34,8 +34,8 @@ void inorder(TREE tree);// função recursiva
 void preorderDFS(struct no *node);// percorre da raiz ate nao ter mais elementos sempre começando da esquerda para direita
 void preorder(TREE tree);// função recursiva
 void porlevel(TREE tree);// função que busca por nivel e necessario uma estrutura de dados semelhante a uma fila
-int BinarySearch(TREE tree, int arg);// faz a busca binaria dentro da arvore
-int BinarySearchBFS(struct no *node,int arg,int result);// a parte recursiva sa busca binaria
+bool BinarySearch(TREE tree, int arg);// faz a busca binaria dentro da arvore
+bool BinarySearchBFS(struct no *node,int arg);// a parte recursiva sa busca binaria
 bool max(TREE tree); // mostra o maior elemento dentro de uma arvore binaria
 bool min(TREE tree); // mostra o menor elemento dentro de uma arvore binaria
 int height(TREE tree);// Função que chama a função recursiva

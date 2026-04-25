@@ -45,8 +45,7 @@ struct no* insertNode(struct no *node, int value,int* count){
     }else if(value > node->value){
         node->right = insertNode(node->right, value, count);
     }; 
-    node = balancear(node);
-    return node;
+    return balancear(node);
 }
 
 bool insert(TREE tree,int value){
@@ -122,7 +121,7 @@ void preorder(TREE tree){
     printf("\n");
 }
 
-int BinarySearchBFS(struct no *node,int arg,int result){
+bool BinarySearchBFS(struct no *node,int arg){
 
     /*
         Essa função faz a busca binaria e devolve
@@ -130,16 +129,13 @@ int BinarySearchBFS(struct no *node,int arg,int result){
         podendo adaptar para qualquer coisa.
     */
 
-    if(node->value == arg) return node->value;
-    if(arg < node->value && node->left != NULL){
-        result = BinarySearchBFS(node->left,arg,result);
-    }else if(arg > node->value && node->right != NULL){
-        result = BinarySearchBFS(node->right,arg,result);
-    };
-    return result;
+    if(node->value == arg) return true;
+    if(arg < node->value && node->left != NULL) return BinarySearchBFS(node->left,arg);
+    else if(arg > node->value && node->right != NULL) return BinarySearchBFS(node->right,arg);
+    return false;
 }
 
-int BinarySearch(TREE tree, int arg){
+bool BinarySearch(TREE tree, int arg){
 
     /*
         Essa função chama a a recurção 
@@ -147,10 +143,8 @@ int BinarySearch(TREE tree, int arg){
     */
 
 
-    int result = 0;
-    result = BinarySearchBFS(tree->node, arg,result);
-    if(result != arg) printf("nao esta\n");
-    return result;
+    
+    return (BinarySearchBFS(tree->node, arg)) ;
 }
 
 void freenode(struct no *node){
@@ -158,12 +152,24 @@ void freenode(struct no *node){
     /*
         Libera a memoria alocada para os nós da arvore.
     */
-
+   /*
+    Queue fila;
+    newQueue(&fila);
+    Enqueue(&fila, node);
+    while (fila.size)
+    {
+        node = Dequeue(&fila);
+        if(node->left != NULL) Enqueue(&fila, node->left);
+        if(node->right != NULL) Enqueue(&fila, node->right);       
+        free(node);
+    }
+        */
     if(node == NULL) return;
+
     freenode(node->left);
-    freenode(node->right);
+    freenode(node->right);   
     free(node);
-    return;
+
 }
 
 bool freeTree(TREE tree){
@@ -171,8 +177,8 @@ bool freeTree(TREE tree){
     /*
         Libera a memoria que a arvore aloca.
     */
-
-    freenode(tree->node);
+    struct no* node = tree->node;
+    freenode(node);
     free(tree);
     return true;
 }
@@ -235,8 +241,10 @@ struct no* removeNodeDfs(struct no *node, int arg, TREE len){
     if(node == NULL) return NULL;
     if(arg < node->value && node->left != NULL){
         node->left = removeNodeDfs(node->left,arg,len);
+        return node;
     }else if(arg > node->value && node->right != NULL){
         node->right = removeNodeDfs(node->right,arg,len);
+        return node;
     }else if(node->value == arg){
         if(node->left == NULL){
             struct no *temp = node->right;
@@ -252,11 +260,11 @@ struct no* removeNodeDfs(struct no *node, int arg, TREE len){
             int aux = _min(node->right);
             if(aux == -1) return node;
             node->value = aux;
-            node->right = removeNodeDfs(node->right, aux,len);    
+            node->right = removeNodeDfs(node->right, aux,len);
+            return node;    
         };
     };
-    node = balancear(node);
-    return node;
+    return balancear(node);
 }
 
 bool removeNode(TREE tree, int arg){

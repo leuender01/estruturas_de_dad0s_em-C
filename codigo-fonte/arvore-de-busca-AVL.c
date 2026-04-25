@@ -5,22 +5,13 @@
 
 
 int FB(struct no* node){
-    if(node == NULL) return -1;
-    return (heightDFS(node->left, 0) - 1) - (heightDFS(node->right, 0) - 1);
-}
 
-void rotate(TREE tree){
     /*
-        Função que fica em loop ate balancear a arvore por completo
+        Calcula fator balanceamento, para rotacionar Arvore
     */
 
-    struct no *node= tree->node;
-    int fb = FB(node); 
-    while(fb > 1 || fb < -1){
-        node = balancear(node);
-        fb = FB(node);
-    };
-    tree->node = node;
+    if(node == NULL) return -1;
+    return (heightDFS(node->left, 0)) - (heightDFS(node->right, 0));
 }
 
 struct no* balancear(struct no* node){
@@ -42,12 +33,16 @@ struct no* balancear(struct no* node){
     return node;
 };
 
-//rotação para direota ----->
 struct no* RSD(struct no* node){
-    if(node == NULL) return node;
 
-   struct no* temp = node->right;
+    /*
+        rotação para direita ----->
+    */
+
+    if(node == NULL || node->left == NULL) return node;
+
     struct no* noraiz = node->left;
+    struct no* temp = noraiz->right;
 
     noraiz->right = node;
     node->left = temp;
@@ -55,25 +50,38 @@ struct no* RSD(struct no* node){
     return noraiz;
 }
 
-//rotação para esquerda <-------
 struct no* RSS(struct no *node){
-    if(node == NULL) return node;
-    struct no* temp = node->left;
+   
+    /*
+        rotação para a esquerda <--------
+    */
+
+    if(node == NULL || node->right == NULL) return node;
     struct no* noraiz = node->right;
+    struct no* temp = noraiz->left;
 
     noraiz->left = node;
     node->right = temp;
-    
+
     return noraiz;
 }
-//rotação Direita-Esquerda <-------- ------>
+
 struct no* RDS(struct no* node){
+
+    /*
+        Rotação para Direita-Esquerda <--------- ---------->    
+    */
+
     node->right = RSD(node->right);
     return node = RSS(node);
 }
 
-//rotação Esqeuerda-Direita ---------> <--------
 struct no* RDD(struct no* node){
+
+    /*
+        Rotação para Esquerda-Direita
+    */
+
     node->left = RSS(node->left);
     return node = RSD(node);
 }
