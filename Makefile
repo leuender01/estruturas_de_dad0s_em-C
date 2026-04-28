@@ -6,53 +6,63 @@ CMD= clear
 OBJ_DIR= ./objects
 BIN_DIR= ./bin
 COD_DIR= ./codigo-fonte
-HEADER=
-BIN=
-SOURCE=
+DIRETORIOS = $(OBJ_DIR) $(BIN_DIR)
 
-ARVORE_AVL_COD= $(COD_DIR)/arvore-binaria-de-busca.c $(COD_DIR)/arvore-de-busca-AVL.c $(COD_DIR)/Queue.c
-ARVORE_AVL_BIN= $(BIN_DIR)/arvoreAvl
+ARVORE_AVL_COD= $(COD_DIR)/arvores/arvore-binaria-de-busca.c $(COD_DIR)/arvores/arvore-de-busca-AVL.c $(COD_DIR)/Queue.c
 ARVORE_AVL_OBJ := $(addprefix $(OBJ_DIR)/, $(notdir $(ARVORE_AVL_COD:.c=.o)))
-ARVORE_AVL_HEADER := $(addprefix $(COD_DIR)/, $(notdir $(ARVORE_AVL_COD:.c=.h))) $(COD_DIR)/arvore-base.h
+ARVORE_AVL_HEADER = $(COD_DIR)/arvores/arvore-binaria-de-busca.h $(COD_DIR)/arvores/arvore-base.h
 
-MERGE_SORT_COD= $(COD_DIR)/merge_sort.c
-MERGE_SORT_BIN= $(BIN_DIR)/merge_sort
-MERGE_SORT_HEADER = $(COD_DIR)/merge_sort.h
+MERGE_SORT_COD= $(COD_DIR)/algoritimos_ordenação/merge_sort.c
+MERGE_SORT_HEADER = $(COD_DIR)/arvores/merge_sort.h
 MERGE_SORT_OBJ := $(addprefix $(OBJ_DIR)/, $(notdir $(MERGE_SORT_COD:.c=.o)))
 
-merge_sort: $(MERGE_SORT_OBJ) $(MERGE_SORT_BIN)
-	$(CC) $(FLAG)  $(MERGE_SORT_OBJ) $(COD_DIR)/teste_merge.c -o $(MERGE_SORT_BIN)
+HASH_COD = $(COD_DIR)/hash.c
+HASH_HEADER = $(COD_DIR)/hash.h
+HASH_BIN = 
+
+
+
+hash: $(DIRETORIOS)  $(HASH_HEADER)  
+	
+	$(CC) $(FLAG) $(HASH_COD) -o $(BIN_DIR)/hash
 	./verificar.sh
-	./$(MERGE_SORT_BIN)
+	./$(BIN_DIR)/hash
 
-$(MERGE_SORT_BIN):
-	@mkdir -p $(BIN_DIR)
 
-$(MERGE_SORT_OBJ): $(MERGE_SORT_HEADER)
+
+##------------------ALGORITIMO_MERGE_SORT-------------
+
+
+merge_sort: $(DIRETORIOS) $(MERGE_SORT_OBJ) 
+	$(CC) $(FLAG)  $(MERGE_SORT_OBJ) $(COD_DIR)/algoritimos_ordenação/teste_merge.c -o $(BIN_DIR)/merge_sort
+	./verificar.sh
+	./$(BIN_DIR)/merge_sort
+
+$(MERGE_SORT_OBJ):
 	@mkdir -p $(OBJ_DIR)
 	$(CC) -c $(MERGE_SORT_COD) -o $(MERGE_SORT_OBJ)
 
 
-arvore_avl: $(ARVORE_AVL_OBJ) $(ARVORE_AVL_BIN)
-	$(CC) $(FLAG) -g $(ARVORE_AVL_OBJ) $(COD_DIR)/teste_avl.c -o $(ARVORE_AVL_BIN)
+
+##--------------------aRVORE_AVL-----------------------
+arvore_avl: $(DIRETORIOS) $(ARVORE_AVL_OBJ) 
+	$(CC) $(FLAG) -g $(ARVORE_AVL_OBJ) $(COD_DIR)/arvores/teste_avl.c -o $(BIN_DIR)/arvoreAvl
 	./verificar.sh
-	./$(ARVORE_AVL_BIN)
-
-$(BIN_DIR)/$(BIN):
-	@mkdir -p $(BIN_DIR)
-
-$(ARVORE_AVL_BIN):
-	@mkdir -p $(BIN_DIR)
+	./$(BIN_DIR)/arvoreAvl
 
 $(ARVORE_AVL_OBJ): $(ARVORE_AVL_COD) $(ARVORE_AVL_HEADER)
-	$(CC) -c $(COD_DIR)/arvore-binaria-de-busca.c -o  $(OBJ_DIR)/arvore-binaria-de-busca.o
-	$(CC) -c $(COD_DIR)/arvore-de-busca-AVL.c -o  $(OBJ_DIR)/arvore-de-busca-AVL.o
+
+	@mkdir -p $(OBJ_DIR)
+	$(CC) -c $(COD_DIR)/arvores/arvore-binaria-de-busca.c -o  $(OBJ_DIR)/arvore-binaria-de-busca.o
+	$(CC) -c $(COD_DIR)/arvores/arvore-de-busca-AVL.c -o  $(OBJ_DIR)/arvore-de-busca-AVL.o
 	$(CC) -c $(COD_DIR)/Queue.c -o  $(OBJ_DIR)/Queue.o
 
-build: clean all run
+
+
+$(DIRETORIOS):
+	@mkdir $(OBJ_DIR)
+	@mkdir $(BIN_DIR)
+
 
 clean:
 	rm $(OBJ_DIR)/*.o
-
-run:
-	$(BIN_DIR)/$(BIN)

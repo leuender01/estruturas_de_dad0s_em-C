@@ -8,9 +8,8 @@ echo "${CMD[@]}"
 
 if [ -z "$CMD" ]; then
 
-    echo "nada a fazer"
     exit
-
+    
 else
 
     rm -f ${CMD[@]}
