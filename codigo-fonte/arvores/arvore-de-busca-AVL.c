@@ -4,17 +4,17 @@
 
 
 
-int FB(struct no* node){
+int FB(NODE node){
 
     /*
         Calcula fator balanceamento, para rotacionar Arvore
     */
 
     if(node == NULL) return -1;
-    return (heightDFS(node->left, 0)) - (heightDFS(node->right, 0));
+    return (height(node->left, 0)) - (height(node->right, 0));
 }
 
-struct no* balancear(struct no* node){
+NODE balancear(NODE node){
 
     /*
         Função principal que realiza 
@@ -33,7 +33,7 @@ struct no* balancear(struct no* node){
     return node;
 };
 
-struct no* RSD(struct no* node){
+NODE RSD(NODE node){
 
     /*
         rotação para direita ----->
@@ -41,8 +41,8 @@ struct no* RSD(struct no* node){
 
     if(node == NULL || node->left == NULL) return node;
 
-    struct no* noraiz = node->left;
-    struct no* temp = noraiz->right;
+    NODE noraiz = node->left;
+    NODE temp = noraiz->right;
 
     noraiz->right = node;
     node->left = temp;
@@ -50,15 +50,15 @@ struct no* RSD(struct no* node){
     return noraiz;
 }
 
-struct no* RSS(struct no *node){
+NODE RSS(NODE node){
    
     /*
         rotação para a esquerda <--------
     */
 
     if(node == NULL || node->right == NULL) return node;
-    struct no* noraiz = node->right;
-    struct no* temp = noraiz->left;
+    NODE noraiz = node->right;
+    NODE temp = noraiz->left;
 
     noraiz->left = node;
     node->right = temp;
@@ -66,7 +66,7 @@ struct no* RSS(struct no *node){
     return noraiz;
 }
 
-struct no* RDS(struct no* node){
+NODE RDS(NODE node){
 
     /*
         Rotação para Direita-Esquerda <--------- ---------->    
@@ -76,7 +76,7 @@ struct no* RDS(struct no* node){
     return node = RSS(node);
 }
 
-struct no* RDD(struct no* node){
+NODE RDD(NODE node){
 
     /*
         Rotação para Esquerda-Direita

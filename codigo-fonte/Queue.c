@@ -36,7 +36,7 @@ bool isFullQueue(Queue *p){
 	return (p->size == TAM_MAX);
 };
 
-bool Enqueue(Queue *p, struct no* node){
+bool Enqueue(Queue *p, NODE node){
 
 	/*
 		Insere um elemento e como so estivesse em
@@ -61,10 +61,10 @@ bool Enqueue(Queue *p, struct no* node){
 		};
 		return true;
 };
-struct no * Dequeue(Queue *p){
+NODE Dequeue(Queue *p){
 	if(empytQueue(p)) return NULL;
 	Element *temp = p->front;
-	struct no* node = temp->node;
+	NODE node = temp->node;
 	p->front = p->front->prox;
 	if(p->front == NULL) p->tail = NULL;
 	free(temp);
@@ -72,7 +72,7 @@ struct no * Dequeue(Queue *p){
 	return node;
 
 };
-struct no * peekQueue(Queue *p){
+NODE peekQueue(Queue *p){
 	if(p->front == NULL) return NULL;
 	return p->front->node;
 };

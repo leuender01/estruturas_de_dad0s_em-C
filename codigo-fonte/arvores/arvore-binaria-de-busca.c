@@ -9,20 +9,20 @@
     aprendendo a fazer uma.
 */
 
-TREE init(TREE tree){
+NODE init(NODE node){
 
     /*
-        inicializa zerando todos os elementos dentro ta arvore.
+        inicializa zerando todos os elementos dentro do node.
     */
-
-    tree = malloc(sizeof(BinarySearchtree));
-    if(tree == NULL) return tree;
-    tree->size = 0;
-    tree->node = NULL;
-    return tree;
+    node = malloc(sizeof(struct no));
+    if(node == NULL) return NULL;
+    node->height = 0;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
 }
 
-struct no* insertNode(struct no *node, int value,int* count){
+struct no * insertNode(NODE node, int value){
     
     /*
         A o mesmo tempo que cria um novo nó ele realizar uma travercia 
@@ -36,38 +36,25 @@ struct no* insertNode(struct no *node, int value,int* count){
         node->value = value;
         node->left = NULL;
         node->right = NULL;
-        *count = *count + 1;
         return node;
     };
 
     if(value < node->value){
-        node->left = insertNode(node->left, value, count);
+        node->left = insertNode(node->left, value);
+        node->height = height(node, 0);
+        return node;
     }else if(value > node->value){
-        node->right = insertNode(node->right, value, count);
+        node->right = insertNode(node->right, value);
+        node->height = height(node, 0);
+        return node;
     }; 
-    return balancear(node);
+    height(node, 0);
+    node = balancear(node);
+    return node;
 }
 
-bool insert(TREE tree,int value){
 
-    /*
-        Essa parte chama a função 
-        recursiva que insere tambem 
-        compara se a inserção foi bem
-        sucedida retornando true ou false.
-    */
-
-    int new_cont = 0;
-    tree->node = insertNode(tree->node,value,&new_cont);
-    //rotate(tree);//se tirar essa parte se torna uma arvore binaria de busca generica
-    if(new_cont != 0){
-        tree->size = tree->size + new_cont;
-        return true;
-    }
-    return false;
-}
-
-void inorderDFS(struct no *node){
+void inorder(NODE node){
 
     /*
         A parte recursiva para p
@@ -75,26 +62,15 @@ void inorderDFS(struct no *node){
         da esquerda para direita.
     */
 
-    if(node->left != NULL) inorderDFS(node->left);
+    if(node->left != NULL) inorder(node->left);
     printf(", %d",node->value);
-    if(node->right != NULL) inorderDFS(node->right);
+    if(node->right != NULL) inorder(node->right);
     return;
 }
 
-void inorder(TREE tree){
 
-    /*
-        A parte que inicia a recursão 
-        e da uma organizada na saida.
-    */
 
-    struct no *node = tree->node;
-    printf("inorder>>");
-    inorderDFS(node);
-    printf("\n");
-}
-
-void preorderDFS(struct no *node){
+void preorder(NODE node){
 
     /*
         A parte recursiva da função 
@@ -104,24 +80,12 @@ void preorderDFS(struct no *node){
     */
 
     printf(", %d",node->value);
-    if(node->left != NULL) preorderDFS(node->left);
-    if(node->right != NULL) preorderDFS(node->right);
+    if(node->left != NULL) preorder(node->left);
+    if(node->right != NULL) preorder(node->right);
     return;
 }
 
-void preorder(TREE tree){
-
-    /*
-        A parte que chama a função recursiva.
-    */
-
-    struct no *node = tree->node;
-    printf("preorder>>");
-    preorderDFS(node);
-    printf("\n");
-}
-
-bool BinarySearchBFS(struct no *node,int arg){
+bool BinarySearchBFS(NODE node,int arg){
 
     /*
         Essa função faz a busca binaria e devolve
@@ -135,19 +99,8 @@ bool BinarySearchBFS(struct no *node,int arg){
     return false;
 }
 
-bool BinarySearch(TREE tree, int arg){
 
-    /*
-        Essa função chama a a recurção 
-        da Busca Binaria e compara se achou alguma coisa.
-    */
-
-
-    
-    return (BinarySearchBFS(tree->node, arg)) ;
-}
-
-void freenode(struct no *node){
+void freenode(NODE node){
 
     /*
         Libera a memoria alocada para os nós da arvore.
@@ -172,46 +125,35 @@ void freenode(struct no *node){
 
 }
 
-bool freeTree(TREE tree){
-
-    /*
-        Libera a memoria que a arvore aloca.
-    */
-    struct no* node = tree->node;
-    freenode(node);
-    free(tree);
-    return true;
-}
-
-bool max(TREE tree){
+bool max(NODE tree){
 
     /*
         Procura pelo maior elemento na arvore.
     */
 
     if(tree == NULL) return false;
-    struct no *aux = tree->node;
+    NODE aux = tree;
     while(aux->right != NULL) aux = aux->right;
     if(aux == NULL) return false;
     printf("%d\n", aux->value);    
     return true;    
 }
 
-bool min(TREE tree){
+bool min(NODE tree){
 
     /*
         Procura pelo menor elemento na arvore.
     */
 
     if(tree == NULL) return false;
-    struct no *aux = tree->node;
+    NODE aux = tree;
     while(aux->left != NULL) aux = aux->left;
     if(aux == NULL) return false;
     printf("%d\n", aux->value);    
     return true;    
 }
 
-int _min(struct no *aux){
+int _min(NODE aux){
 
     /*
         Usando em conjunto com a função de remoção, 
@@ -226,7 +168,7 @@ int _min(struct no *aux){
     return aux->value;    
 }
 
-struct no* removeNodeDfs(struct no *node, int arg, TREE len){
+struct no *removeNodeDfs(NODE node, int arg){
 
     /*
         Função recursiva que vai remover o no em tres casos no primeiro se o 
@@ -240,46 +182,43 @@ struct no* removeNodeDfs(struct no *node, int arg, TREE len){
 
     if(node == NULL) return NULL;
     if(arg < node->value && node->left != NULL){
-        node->left = removeNodeDfs(node->left,arg,len);
+        node->left = removeNodeDfs(node->left,arg);
         return node;
     }else if(arg > node->value && node->right != NULL){
-        node->right = removeNodeDfs(node->right,arg,len);
+        node->right = removeNodeDfs(node->right,arg);
         return node;
     }else if(node->value == arg){
         if(node->left == NULL){
-            struct no *temp = node->right;
+            NODE temp = node->right;
             free(node);
-            len->size--;
             return temp;
         }else if(node->right == NULL){
-            struct no *temp = node->left;
+            NODE temp = node->left;
             free(node);
-            len->size--;
             return temp;
         }else{
             int aux = _min(node->right);
             if(aux == -1) return node;
             node->value = aux;
-            node->right = removeNodeDfs(node->right, aux,len);
+            node->right = removeNodeDfs(node->right, aux);
             return node;    
         };
     };
     return balancear(node);
 }
 
-bool removeNode(TREE tree, int arg){
+bool removeNode(NODE tree, int arg){
 
     /*
         Inicia a recurção e ao final ela 
         retorna true caso um  nó tenha sido removido.
     */
-
-    int old_size = tree->size;
-    tree->node = removeNodeDfs(tree->node, arg,tree);
-    return !(tree->size == old_size);
+    int old_size = tree->height;
+    tree = removeNodeDfs(tree, arg);
+    return !(tree->height == old_size);
 }
 
-void porlevel(TREE tree){
+void porlevel(NODE tree){
 
     /*
         Busca por nivel ela
@@ -290,7 +229,7 @@ void porlevel(TREE tree){
 
     if(tree == NULL) return;
     Queue fila;
-    struct no* aux = tree->node;
+    NODE aux = tree;
     newQueue(&fila);
     Enqueue(&fila, aux);
     printf("Porlevel>>>\n");
@@ -305,7 +244,7 @@ void porlevel(TREE tree){
     printf("\n");
 }
 
-int heightDFS(struct no* node, int len){
+int height(NODE node, int len){
 
     /*
         Função para calcular a altura de uma arvore,
@@ -314,13 +253,8 @@ int heightDFS(struct no* node, int len){
 
     if(node == NULL) return len;
     len++;
-    int left = heightDFS(node->left, len);
-    int right = heightDFS(node->right, len);
+    int left = height(node->left, len);
+    int right = height(node->right, len);
     if(left >= right) return left;
     return right;
-}
-
-int height(TREE tree){
-    int size = heightDFS(tree->node, 0);
-    return size;
 }

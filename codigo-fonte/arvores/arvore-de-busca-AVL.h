@@ -7,11 +7,12 @@
     ser inserido como uma extenção da 
     arvore binaria sendo dependente dela.
 */
-int FB(struct no* node);//função que calcula o fator de balanceamento 
-struct no* balancear(struct no* node);//função que balanceia uma vez
-struct no* RSS(struct no* node);//função que rotaciona para esquerda
-struct no* RSD(struct no *node);//função que rotaciona para direita
-struct no* RDS(struct no* node);//função que rotaciona primerio para direita depois para esquerda
-struct no* RDD(struct no* node);//função que rotaciona primeiro para esquerda depois para direita
+int FB(NODE node);//função que calcula o fator de balanceamento 
+NODE balancear(NODE node);//função que balanceia uma vez
+
+NODE RSS(NODE node);//função que rotaciona para esquerda
+NODE RSD(NODE node);//função que rotaciona para direita
+NODE RDS(NODE node);//função que rotaciona primerio para direita depois para esquerda
+NODE RDD(NODE node);//função que rotaciona primeiro para esquerda depois para direita
 
 #endif
