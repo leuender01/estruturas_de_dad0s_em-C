@@ -61,7 +61,7 @@ bool Enqueue(Queue *p, NODE node){
 		};
 		return true;
 };
-NODE Dequeue(Queue *p){
+struct no* Dequeue(Queue *p){
 	if(empytQueue(p)) return NULL;
 	Element *temp = p->front;
 	NODE node = temp->node;

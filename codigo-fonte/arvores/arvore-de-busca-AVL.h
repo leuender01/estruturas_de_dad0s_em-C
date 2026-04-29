@@ -9,6 +9,7 @@
 */
 int FB(NODE node);//função que calcula o fator de balanceamento 
 NODE balancear(NODE node);//função que balanceia uma vez
+void updateheigth(NODE node);// função que atualiza a altura de um nó
 
 NODE RSS(NODE node);//função que rotaciona para esquerda
 NODE RSD(NODE node);//função que rotaciona para direita

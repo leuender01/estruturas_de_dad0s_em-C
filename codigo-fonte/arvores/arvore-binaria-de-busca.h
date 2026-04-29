@@ -32,15 +32,14 @@ void inorder(NODE tree);// função recursiva
 void preorderDFS(NODE  node);// percorre da raiz ate nao ter mais elementos sempre começando da esquerda para direita
 void preorder(NODE tree);// função recursiva
 void porlevel(NODE tree);// função que busca por nivel e necessario uma estrutura de dados semelhante a uma fila
-bool BinarySearchBFS(NODE  node,int arg);// a parte recursiva sa busca binaria
+bool BinarySearch(NODE  node,int arg);// a parte recursiva sa busca binaria
 bool max(NODE tree); // mostra o maior elemento dentro de uma arvore binaria
 bool min(NODE tree); // mostra o menor elemento dentro de uma arvore binaria
 int height(struct no* node, int len);// FUnção principal que vai procurar o mair caminho dentro da arvore
 
 // <<<<<<<<<< REMOVE UM NÓ DA ARVORE >>>>>>>>>>>>
 
-bool removeNode(NODE tree, int arg);// função que inicia o preocesso de remover um no sem quebrar a arvore
-struct no* removeNodeDfs(NODE  node, int arg);// a parte recursiva da remoção
+NODE removeNode(NODE *node, int arg);// a parte recursiva da remoção
 int _min(NODE  aux); // usada em conjunto com a função de remover pode ser substituida
 
 //<<<<<<<<< LIBERA A MEMORIA ALOCADA >>>>>>>>>>>>>>

@@ -9,19 +9,6 @@
     aprendendo a fazer uma.
 */
 
-NODE init(NODE node){
-
-    /*
-        inicializa zerando todos os elementos dentro do node.
-    */
-    node = malloc(sizeof(struct no));
-    if(node == NULL) return NULL;
-    node->height = 0;
-    node->left = NULL;
-    node->right = NULL;
-    return node;
-}
-
 struct no * insertNode(NODE node, int value){
     
     /*
@@ -36,19 +23,19 @@ struct no * insertNode(NODE node, int value){
         node->value = value;
         node->left = NULL;
         node->right = NULL;
+        node->height = 0; 
         return node;
     };
 
     if(value < node->value){
         node->left = insertNode(node->left, value);
-        node->height = height(node, 0);
-        return node;
+        updateheigth(node->left);
     }else if(value > node->value){
         node->right = insertNode(node->right, value);
-        node->height = height(node, 0);
-        return node;
+        updateheigth(node->right);
     }; 
-    height(node, 0);
+    updateheigth(node);
+    //printf("a altura do node %d, altura %d\n", node->value, node->height);
     node = balancear(node);
     return node;
 }
@@ -85,7 +72,7 @@ void preorder(NODE node){
     return;
 }
 
-bool BinarySearchBFS(NODE node,int arg){
+bool BinarySearch(NODE node,int arg){
 
     /*
         Essa função faz a busca binaria e devolve
@@ -94,8 +81,8 @@ bool BinarySearchBFS(NODE node,int arg){
     */
 
     if(node->value == arg) return true;
-    if(arg < node->value && node->left != NULL) return BinarySearchBFS(node->left,arg);
-    else if(arg > node->value && node->right != NULL) return BinarySearchBFS(node->right,arg);
+    if(arg < node->value && node->left != NULL) return BinarySearch(node->left,arg);
+    else if(arg > node->value && node->right != NULL) return BinarySearch(node->right,arg);
     return false;
 }
 
@@ -168,7 +155,7 @@ int _min(NODE aux){
     return aux->value;    
 }
 
-struct no *removeNodeDfs(NODE node, int arg){
+NODE removeNode(NODE *node_prt, int arg){
 
     /*
         Função recursiva que vai remover o no em tres casos no primeiro se o 
@@ -179,43 +166,30 @@ struct no *removeNodeDfs(NODE node, int arg){
         e claro usando a Busca binaria para percorrer a arvore.
     */
 
-
-    if(node == NULL) return NULL;
-    if(arg < node->value && node->left != NULL){
-        node->left = removeNodeDfs(node->left,arg);
-        return node;
-    }else if(arg > node->value && node->right != NULL){
-        node->right = removeNodeDfs(node->right,arg);
-        return node;
+    NODE node = *node_prt;
+    if(*node_prt == NULL) return NULL;
+    if(arg < (*node_prt)->value){
+        (*node_prt)->left = removeNode(&(*node_prt)->left,arg);
+    }else if(arg > node->value){
+        (*node_prt)->right = removeNode(&(*node_prt)->right,arg);
     }else if(node->value == arg){
-        if(node->left == NULL){
-            NODE temp = node->right;
-            free(node);
-            return temp;
-        }else if(node->right == NULL){
-            NODE temp = node->left;
-            free(node);
-            return temp;
+        NODE temp = *node_prt;
+        if((*node_prt)->left == NULL || (*node_prt)->right == NULL){
+            
+            NODE filho = ((*node_prt)->left)? (*node_prt)->left : (*node_prt)->right;
+            free(temp);
+            *node_prt = filho;
+            return *node_prt;
+
         }else{
-            int aux = _min(node->right);
-            if(aux == -1) return node;
-            node->value = aux;
-            node->right = removeNodeDfs(node->right, aux);
-            return node;    
+            int aux = _min((*node_prt)->right);
+            (*node_prt)->value = aux;
+            (*node_prt)->right = removeNode(&((*node_prt)->right), aux);
         };
     };
-    return balancear(node);
-}
-
-bool removeNode(NODE tree, int arg){
-
-    /*
-        Inicia a recurção e ao final ela 
-        retorna true caso um  nó tenha sido removido.
-    */
-    int old_size = tree->height;
-    tree = removeNodeDfs(tree, arg);
-    return !(tree->height == old_size);
+    updateheigth(*node_prt);
+    *node_prt = balancear(*node_prt);
+    return *node_prt;
 }
 
 void porlevel(NODE tree){
@@ -251,10 +225,5 @@ int height(NODE node, int len){
         pretendo usar futuramente para colar arvores AvL.
     */
 
-    if(node == NULL) return len;
-    len++;
-    int left = height(node->left, len);
-    int right = height(node->right, len);
-    if(left >= right) return left;
-    return right;
+    return ( node == NULL)? -1 : node->height;
 }

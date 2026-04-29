@@ -10,11 +10,12 @@ int FB(NODE node){
         Calcula fator balanceamento, para rotacionar Arvore
     */
 
-    if(node == NULL) return -1;
-    return (height(node->left, 0)) - (height(node->right, 0));
+    if(node == NULL) return 0;
+
+    return height(node->left, 0) - height(node->right, 0);
 }
 
-NODE balancear(NODE node){
+struct no* balancear(NODE node){
 
     /*
         Função principal que realiza 
@@ -41,11 +42,14 @@ NODE RSD(NODE node){
 
     if(node == NULL || node->left == NULL) return node;
 
-    NODE noraiz = node->left;
-    NODE temp = noraiz->right;
+    struct no* noraiz = node->left;
+    struct no* temp = noraiz->right;
 
     noraiz->right = node;
     node->left = temp;
+    
+    updateheigth(node);
+    updateheigth(noraiz);
     
     return noraiz;
 }
@@ -62,6 +66,9 @@ NODE RSS(NODE node){
 
     noraiz->left = node;
     node->right = temp;
+
+    updateheigth(node);
+    updateheigth(noraiz);
 
     return noraiz;
 }
@@ -84,4 +91,20 @@ NODE RDD(NODE node){
 
     node->left = RSS(node->left);
     return node = RSD(node);
+}
+
+void updateheigth(NODE node){
+
+    /*
+        Atualiza a altura de um nó, pode ser usada
+         para atualizar a altura depois de uma rotação, 
+         mas por enquanto estou usando a função height
+          para calcular a altura de um nó, mas pretendo
+           usar futuramente para colar arvores AvL.
+    */
+
+    if(node == NULL) return;
+    int left = (node->left != NULL)? node->left->height : -1;
+    int right = (node->right != NULL)? node->right->height : -1;
+    node->height = (left >= right)? left + 1 : right + 1;
 }
