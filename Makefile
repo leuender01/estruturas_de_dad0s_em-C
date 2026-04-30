@@ -8,6 +8,11 @@ BIN_DIR= ./bin
 COD_DIR= ./codigo-fonte
 DIRETORIOS = $(OBJ_DIR) $(BIN_DIR)
 
+ARVORE_RUMBRO_NEGRA_COD= $(COD_DIR)/arvores/arvore_rumbro_negra.c
+ARVORE_RUMBRO_NEGRA_OBJ= $(COD_DIR)/arvores/arvore_rumbro_negra.o
+ARVORE_RUMBRO_NEGRA_HEADER= $(COD_DIR)/arvores/arvore_rumbro_negra.h
+QUEUE_NEGRA= $(OBJ_DIR)/Queue_negra.o
+
 ARVORE_AVL_COD= $(COD_DIR)/arvores/arvore-binaria-de-busca.c $(COD_DIR)/arvores/arvore-de-busca-AVL.c $(COD_DIR)/Queue.c
 ARVORE_AVL_OBJ := $(addprefix $(OBJ_DIR)/, $(notdir $(ARVORE_AVL_COD:.c=.o)))
 ARVORE_AVL_HEADER = $(COD_DIR)/arvores/arvore-binaria-de-busca.h $(COD_DIR)/arvores/arvore-base.h
@@ -20,6 +25,14 @@ HASH_COD = $(COD_DIR)/hash.c
 HASH_HEADER = $(COD_DIR)/hash.h
 HASH_BIN = 
 
+
+arvore_rumbro: $(DIRETORIOS) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA)
+	$(CC) $(FLAG) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA) -o $(BIN_DIR)/arvorerumbro
+	./verificar.sh
+	./$(BIN_DIR)/arvorerumbro
+
+$(QUEUE_NEGRA): $(COD_DIR)/arvores/Queue_negra.h
+	$(CC) -c $(COD_DIR)/arvores/Queue_negra.c -o $(QUEUE_NEGRA)
 
 
 hash: $(DIRETORIOS)  $(HASH_HEADER)  
