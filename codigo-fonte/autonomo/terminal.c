@@ -3,40 +3,28 @@
 #include <sys/types.h>
 #include <string.h>
 #include <stdbool.h>
+#include <pty.h>
+#include <utmp.h>
+
+extern char * environ[];
 
 int main(void)
 {
 
-    int fd[2];
-    char buffer[30];
-    char *enviar[] = {"ola mundo\n", "adeus mundo\n"};
-    pipe(fd);
+    int master;
+    int slave;
+    openpty(&master, &slave, NULL, NULL, NULL);
 
     pid_t pid = fork();
-    if (pid == 0)
-    {
+    if(pid == 0){
+        login_tty(slave);
+        char *PATH = "/usr/bin/bash";   
 
-        int k = 0;
-        while (true){
-            close(fd[0]); // fecha a leitura
-            if(k > 1) k = 0;
-            write(fd[1], enviar[k], strlen(enviar[k]));
-            k++;
-            sleep(1);
-        };
-    }
-    else
-    {
-        while (true)
-        {   
-            close(fd[1]);                        // fecha a escrita
-            read(fd[0], buffer, sizeof(buffer)); // inicia a leitura
-
-            FILE *fille = fopen("leu", "a");
-            fprintf(fille, "%s", buffer);
-            fclose(fille);
-            sleep(1);
-        }
+        char *argv[] = {PATH, NULL}; 
+        execve(PATH, argv, environ);
+    }else{
+        printf("kellow world: %d\n", pid);
+        getchar();
     }
 
     return 0;
