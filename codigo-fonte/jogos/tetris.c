@@ -7,6 +7,8 @@
 #include "tetris.h"
 // #include "cor.h"
 
+
+long point = 0;
 const MODELO BLOCOS[] = {
     {
         .max_rot = 1,
@@ -60,7 +62,7 @@ const MODELO BLOCOS[] = {
                        {{' ', ' ', ' '},  //
                         {' ', ' ', ' '},  // # # #
                         {'#', '#', '#'}}, //
-                   }},
+                    }},
     {.max_rot = 4, .forma = {                   // PECA Z
                              {{' ', '#', ' '},  //   #
                               {' ', '#', '#'},  //   # #
@@ -110,13 +112,13 @@ int main(void)
 
     inicializador(&player);
 
-    int c = 0;
     while (1)
     {
         table();
         refresh();
         //napms(100);
         Player(&player);
+        points();
     }
 
     sair();
@@ -159,7 +161,7 @@ void inicializador(PLAYER *player)
     bkgd(COLOR_PAIR(1));
     noecho();
     //nodelay(stdscr, TRUE);
-    timeout(150);
+    timeout(300);
     keypad(stdscr, TRUE);
     /* bkgd(COLOR_PAIR(1));  Aqui nós definiremos que a cor de fundo do nosso
     programa será azul e a cor dos textos será branca.
@@ -396,4 +398,40 @@ void tetris_clear(PLAYER *player)
         }
     }
 
+}
+
+void points(void)
+{   
+    attron(COLOR_PAIR(3));
+    int range_end = TAM_MAX_Y - 2;
+    int range_start = 2;
+    int count = 0;
+     for (register int x = 0; x < TAM_MAX_X; x++)
+    {
+        count = 0;
+        for (register int y = range_start; y < range_end; y++)
+        {
+           if(matriz[x][y] == 'X')
+           { 
+                mvprintw(x, (TAM_MAX_Y * 2) + y, "%c", matriz[x][y]);
+                count++;
+                
+                if(count >= 25)
+                {
+                    mvprintw(x, (TAM_MAX_Y * 3), "%d", count);
+                    for(register int linha = x ; linha > 1; linha--) for(register int coluna = range_start; coluna < range_end; coluna++)
+                    {
+                        mvprintw(linha, (TAM_MAX_Y * 4) + coluna, "%c", matriz[linha][coluna]);
+                        if(matriz[linha - 1][coluna] != '='){
+                            matriz[linha][coluna] = matriz[linha - 1][coluna];
+                        }
+                    }
+                    point += 5;
+                }
+           }
+        }
+    }
+
+    mvprintw(TAM_MAX_X + 1, 1, "Pontos: %li", point);
+    attron(COLOR_PAIR(3));
 }

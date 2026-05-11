@@ -25,6 +25,14 @@ HASH_COD = $(COD_DIR)/hash.c
 HASH_HEADER = $(COD_DIR)/hash.h
 HASH_BIN = 
 
+TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
+
+
+tetris: $(DIRETORIOS) 
+
+	$(CC) $(FLAG) $(TETRIS_JOGO) -o ./bin/tetris -lncurses
+	./bin/tetris
+	./verificar.sh
 
 arvore_rumbro: $(DIRETORIOS) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA)
 	$(CC) $(FLAG) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA) -o $(BIN_DIR)/arvorerumbro

@@ -33,5 +33,6 @@ void Previw(PLAYER * player);
 void tetris_previw(PLAYER *player);
 void clear_tetris(PLAYER *player);
 void tetris_clear(PLAYER *player);
+void points(void);
 
 #endif
