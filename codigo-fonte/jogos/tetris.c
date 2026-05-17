@@ -3,6 +3,7 @@
 #include <time.h>
 #include <ncurses.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #include "tetris.h"
 // #include "cor.h"
@@ -110,13 +111,16 @@ int main(void)
     srand(time(NULL));
     PLAYER player;
 
+    menu();
+    
+    
     inicializador(&player);
 
     while (1)
     {
         table();
         refresh();
-        //napms(100);
+
         Player(&player);
         points();
     }
@@ -152,39 +156,18 @@ void inicializador(PLAYER *player)
 
     initscr();     // inicializa a biblioteca
     start_color(); // inicializa as cores
-
+    
     init_pair(1, COLOR_BLACK, COLOR_BLACK);  // Texto(Branco) | Fundo(Azul)
     init_pair(2, COLOR_YELLOW, COLOR_BLACK); // Texto(Vermelho) | Fundo(Branco)
     init_pair(3, COLOR_WHITE, COLOR_BLACK);  // Texto(Azul) | Fundo(Branco)
     init_pair(4, COLOR_BLUE, COLOR_BLACK);  // Texto(Azul) | Fundo(Branco)
-
+    
     bkgd(COLOR_PAIR(1));
     noecho();
-    //nodelay(stdscr, TRUE);
-    timeout(300);
+    
     keypad(stdscr, TRUE);
-    /* bkgd(COLOR_PAIR(1));  Aqui nós definiremos que a cor de fundo do nosso
-    programa será azul e a cor dos textos será branca.
-
-                                      attron(COLOR_PAIR(3)); Estamos alterando o par de cores para 3 em vez
-                                      de utilizar o par de cor por omissão(1).
-
-                                      move(2,1);  Aqui estamos movendo o cursor para a linha 2 coluna 1.
-                                      printw("Olá mundo!!!");  Imprimimos um texto na tela na posição acima.
-                                      attroff(COLOR_PAIR(3));  Estamos alterando o par com a cor por omissão,
-                                      ou seja, retornando para o par de cor 1.
-                                      attron(COLOR_PAIR(2));
-                                      move(1,6);
-    printw("Qualquer tecla para sair."); Imprimimos um texto na tela na
-    posição acima.
-    attroff(COLOR_PAIR(2));
-    */
-    attron(COLOR_PAIR(1));
-    table();
-    attron(COLOR_PAIR(1));
-    // refresh();
-    // Fica esperando que o usuário aperte alguma tecla
-};
+    
+}
 
 void table(void)
 {
@@ -207,7 +190,7 @@ void Player(PLAYER *player)
         for (register int y = 0; y < 3; y++)
         {
             if (player->blocos[x][y] == '#')
-                matriz[player->x + x][player->y + y] = ' ';
+            matriz[player->x + x][player->y + y] = ' ';
         }
     }
     tetris_clear(player);
@@ -227,8 +210,9 @@ void Player(PLAYER *player)
     if(c == 'q'){
         rotate(player);
     }else if(c == 27){
-        sair();
+        menu();
     }
+    timeout(300);
 
     Previw(player);
     if (!colision(player, player->x + 1, player->y))
@@ -237,10 +221,10 @@ void Player(PLAYER *player)
         for (register int x = 0; x < 3; x++)
         {
             for (register int y = 0; y < 3; y++)
-                if (matriz[player->x + x][player->y + y])
-                    if (player->blocos[x][y] == '#')
-                        matriz[player->x + x][player->y + y] = '#';
-        }
+            if (matriz[player->x + x][player->y + y])
+                if (player->blocos[x][y] == '#')
+                matriz[player->x + x][player->y + y] = '#';
+                    }
         tetris_previw(player);
     }
     else
@@ -251,26 +235,26 @@ void Player(PLAYER *player)
             for (register int y = 0; y < 3; y++)
             {
                 if (player->blocos[x][y] == '#')
-                    matriz[player->x + x][player->y + y] = 'X';
+                matriz[player->x + x][player->y + y] = 'X';
+                }
             }
-        }
-
-        player->x = 2;
-        player->y = TAM_MAX_Y / 2;
-        escolher(player);
-
-        if(colision(player, player->x, player->y)) sair();        
-    };
+        
+            player->x = 2;
+            player->y = TAM_MAX_Y / 2;
+            escolher(player);
+            
+            if(colision(player, player->x, player->y)) sair();        
+        };
 }
 
 void rotate(PLAYER *player)
 {
     if (player->rotate ==  BLOCOS[player->type].max_rot) player->rotate = 1;
     else player->rotate++;
-
-
     
-
+    
+    
+    
     for(register int x = 0; x < 3; x++){
         for(register int y = 0; y < 3; y++){
             player->blocos[x][y] = BLOCOS[player->type].forma[player->rotate - 1][x][y];
@@ -282,10 +266,10 @@ void escolher(PLAYER *player)
 {
     int tipo = rand() % 7;
     int rot = rand() % BLOCOS[tipo].max_rot;
-
+    
     player->type = tipo;
     player->rotate = rot;
-
+    
     for (register int x = 0; x < 3; x++)
     {
         for (register int y = 0; y < 3; y++)
@@ -307,13 +291,13 @@ bool colision(PLAYER *player, int index, int indey)
             {
                 int targetX = index + x;
                 int targetY = indey + y;
-
+                
                 if (targetX >= TAM_MAX_X - 1 || targetY >= TAM_MAX_Y - 1 || targetY <= 0)
-                    return true;
-
+                return true;
+                
                 if (matriz[targetX][targetY] == '=' || matriz[targetX][targetY] == 'X')
-                    return true;
-
+                return true;
+                
             }
         }
     }
@@ -340,7 +324,7 @@ void Previw(PLAYER * player)
             previw[2 + x][2 + y] = player->blocos[x][y];
         }
     }
-
+    
     for (register int x = 0; x < 7; x++)
     {
         for (register int y = 0; y < 7; y++)
@@ -359,7 +343,7 @@ void Previw(PLAYER * player)
 void tetris_previw(PLAYER *player)
 {
     int ghost_x = player->x;
-
+    
     while (!colision(player, ghost_x + 1, player->y)) {
         ghost_x++;
     }
@@ -370,18 +354,18 @@ void tetris_previw(PLAYER *player)
                 // Desenha apenas se a posição estiver vazia na matriz real
                 // para não sobrepor a peça que está caindo
                 if (ghost_x + x > player->x + 2) { 
-                     matriz[ghost_x + x][player->y + y] = '@';
+                    matriz[ghost_x + x][player->y + y] = '@';
                 }
             }
         }
     }
-
+    
 }
 
 void tetris_clear(PLAYER *player)
 {
     int ghost_x = player->x;
-
+    
     while (!colision(player, ghost_x + 1, player->y)) {
         ghost_x++;
     }
@@ -393,11 +377,11 @@ void tetris_clear(PLAYER *player)
                 // para não sobrepor a peça que está caindo
                 if (ghost_x + x > player->x + 2) { 
                      matriz[ghost_x + x][player->y + y] = ' ';
+                    }
                 }
             }
         }
-    }
-
+        
 }
 
 void points(void)
@@ -413,25 +397,105 @@ void points(void)
         {
            if(matriz[x][y] == 'X')
            { 
-                mvprintw(x, (TAM_MAX_Y * 2) + y, "%c", matriz[x][y]);
+                //mvprintw(x, (TAM_MAX_Y * 2) + y, "%c", matriz[x][y]);
                 count++;
                 
                 if(count >= 25)
                 {
-                    mvprintw(x, (TAM_MAX_Y * 3), "%d", count);
+                    //mvprintw(x, (TAM_MAX_Y * 3), "%d", count);
+                    
                     for(register int linha = x ; linha > 1; linha--) for(register int coluna = range_start; coluna < range_end; coluna++)
                     {
-                        mvprintw(linha, (TAM_MAX_Y * 4) + coluna, "%c", matriz[linha][coluna]);
+                        //mvprintw(linha, (TAM_MAX_Y * 4) + coluna, "%c", matriz[linha][coluna]);
                         if(matriz[linha - 1][coluna] != '='){
                             matriz[linha][coluna] = matriz[linha - 1][coluna];
                         }
                     }
                     point += 5;
                 }
-           }
+            }
         }
     }
-
+    
     mvprintw(TAM_MAX_X + 1, 1, "Pontos: %li", point);
     attron(COLOR_PAIR(3));
+}
+
+void menu(void){
+    initscr();     // inicializa a biblioteca
+    
+    start_color(); // inicializa as cores
+    init_pair(1, COLOR_WHITE, COLOR_BLACK); 
+    init_pair(2, COLOR_YELLOW, COLOR_BLACK); 
+    bkgd(COLOR_PAIR(1));
+    
+    curs_set(0);
+    keypad(stdscr, TRUE);
+    noecho();
+    timeout(100);
+    
+    for(int a = 0; a < TAM_MAX_X; a++){
+       for(int b = 0; b < TAM_MAX_Y; b++){
+           mvprintw(a, b, " ");
+       }
+    }   
+
+    char *select[3] = {"INICIAR", "OPCOES", " EXIT"};
+    int len = TAM_ARRAY(select);
+    int destaque = 0;
+    int8_t  prox = 1;
+    
+    for(int a = 0; a < 21; a++){
+        for(int b = 0; b < 60; b++){
+            if(a == 0 || a == 20 || b == 0 || b == 59 ) mvprintw(a, b, "*");
+        }
+    }    
+    
+    attron(COLOR_PAIR(2));
+    
+    
+    while (prox){
+
+        for(int a = 0; a < 3; a++){
+            if(a == destaque){
+                attron(A_REVERSE);
+                mvprintw(10 + a, 25, "->%s<-",select[a]);
+                attroff(A_REVERSE);
+            }else{
+                mvprintw(10 + a, 25, "  %s  ",select[a]);
+            }
+        };
+        
+        int c =  getch();
+
+        switch (c)
+        {
+        case KEY_UP:
+            destaque = (destaque - 1 + len) % len;
+        break;
+
+        case KEY_DOWN:
+            destaque = (destaque + 1) % len;
+        break;
+
+        case 10:
+            if(destaque == len - 1){
+                sair();
+            }else if(destaque == len - 3){
+                prox = !prox;
+            }
+        break;
+
+        default:
+            break;
+
+    }
+    
+}
+for(int a = 0; a < 21; a++){
+   for(int b = 0; b < 60; b++){
+       mvprintw(a, b, " ");
+   }
+}    
+endwin(); // finaliza a bibliotec
 }

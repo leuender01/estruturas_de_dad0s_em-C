@@ -3,6 +3,7 @@
 
 #define TAM_MAX_X 51
 #define TAM_MAX_Y 30
+#define TAM_ARRAY(arr) (sizeof(arr)/sizeof(arr[0]))
 
 
 #include <stdbool.h>
@@ -22,6 +23,7 @@ typedef struct {
 
 char matriz[TAM_MAX_X][TAM_MAX_Y] = {0};
 
+void menu(void);
 void table(void);
 void sair(void);
 void inicializador(PLAYER *player);
