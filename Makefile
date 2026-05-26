@@ -27,6 +27,11 @@ HASH_BIN =
 
 TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
 
+terminal: $(DIRETORIOS)
+
+	$(CC) $(FLANG) -o ./bin/terminal ./codigo-fonte/autonomo/terminal.c -lSDL3 -lSDL3_ttf
+	./bin/terminal
+	./verificar.sh
 
 tetris: $(DIRETORIOS) 
 
