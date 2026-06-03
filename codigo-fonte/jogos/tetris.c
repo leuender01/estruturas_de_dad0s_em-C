@@ -449,6 +449,14 @@ void menu(void)
     noecho();
     timeout(100);
 
+    
+
+    char *select[3] = {"INICIAR", " HELP", " EXIT"};
+    int8_t len = TAM_ARRAY(select);
+    int8_t destaque = 0;
+    int16_t prox = 1;
+
+
     for (int a = 0; a < TAM_MAX_X * 2; a++)
     {
         for (int b = 0; b < TAM_MAX_Y * 2; b++)
@@ -456,12 +464,12 @@ void menu(void)
             mvprintw(a, b, " ");
         }
     }
+    
 
-    char *select[3] = {"INICIAR", "OPCOES", " EXIT"};
-    int8_t len = TAM_ARRAY(select);
-    int8_t destaque = 0;
-    int16_t prox = 1;
 
+    while (prox)
+    {
+    attron(COLOR_PAIR(1));
     for (int a = 0; a < 21; a++)
     {
         for (int b = 0; b < 60; b++)
@@ -471,11 +479,8 @@ void menu(void)
         }
     }
 
+    attroff(COLOR_PAIR(1));
     attron(COLOR_PAIR(2));
-
-    while (prox)
-    {
-
         for (int a = 0; a < 3; a++)
         {
             if (a == destaque)
@@ -507,6 +512,10 @@ void menu(void)
             {
                 sair();
             }
+            if (destaque == len - 2)
+            {
+                help();
+            }
             else if (destaque == len - 3)
             {
                 prox = !prox;
@@ -516,6 +525,8 @@ void menu(void)
         default:
             break;
         }
+    attroff(COLOR_PAIR(2));
+
     }
     for (int a = 0; a < 21; a++)
     {
@@ -526,3 +537,58 @@ void menu(void)
     }
     endwin(); // finaliza a bibliotec
 }
+
+void help(void){
+ 
+    initscr();
+    char *intrucoes[] = {"<Seta para esquerda>: movimenta para esquerda", "<Seta para direita>: movimenta para direita","<Seta para baixo>: acelera a queda do bloco","<Tecla \'Q\'>: Rotaciona o bloco","<Tecla ESC>: acesso ao menu"};
+
+
+    init_pair(5, COLOR_BLACK, COLOR_YELLOW); 
+    int prox = 1;
+    
+    for (int a = 0; a < TAM_MAX_X * 2; a++)
+    {
+        for (int b = 0; b < TAM_MAX_Y * 2; b++)
+        {
+            mvprintw(a, b, " ");
+        }
+    }
+    attron(COLOR_PAIR(5));
+    mvprintw(TAM_MAX_X/3, 1, "%s", "precione \"q\" para sair" );
+    attroff(COLOR_PAIR(5));
+    
+    attron(COLOR_PAIR(1));
+    for (int a = 0; a < TAM_MAX_X / 3 + 2; a++)
+    {
+        for (int b = 0; b < 60; b++)
+        {
+            if (a == 0 || a == TAM_MAX_X / 3 + 1 || b == 0 || b == 59)
+                mvprintw(a, b, "*");
+        }
+    }
+    for(int register i = 0; i < 5; i++)  mvprintw(2 + i, 3,"%s",intrucoes[i]);
+
+
+    attroff(COLOR_PAIR(1));
+
+
+    while (prox)
+    {
+  
+        int16_t c = getch();
+        if((c == 'q' || c == 'Q'))  prox = !prox;
+      
+    }
+    for (int a = 0; a < TAM_MAX_X * 2; a++)
+    {
+        for (int b = 0; b < TAM_MAX_Y * 2; b++)
+        {
+            mvprintw(a, b, " ");
+        }
+    }
+    endwin();
+}
+
+
+

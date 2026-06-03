@@ -26,12 +26,15 @@ HASH_HEADER = $(COD_DIR)/hash.h
 HASH_BIN = 
 
 TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
+ 
 
-terminal: $(DIRETORIOS)
+## Ainda em produção
 
-	$(CC) $(FLANG) -o ./bin/terminal ./codigo-fonte/autonomo/terminal.c -lSDL3 -lSDL3_ttf
-	./bin/terminal
-	./verificar.sh
+##terminal: $(DIRETORIOS)
+## 
+##	$(CC) $(FLANG) -o ./bin/terminal ./codigo-fonte/autonomo/terminal.c -lSDL3 -lSDL3_ttf
+##	./bin/terminal
+##	./verificar.sh
 
 tetris: $(DIRETORIOS) 
 
@@ -39,10 +42,12 @@ tetris: $(DIRETORIOS)
 	./bin/tetris
 	./verificar.sh
 
-arvore_rumbro: $(DIRETORIOS) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA)
-	$(CC) $(FLAG) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA) -o $(BIN_DIR)/arvorerumbro
-	./verificar.sh
-	./$(BIN_DIR)/arvorerumbro
+#Ainda em produção
+
+#arvore_rumbro: $(DIRETORIOS) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA)
+#	$(CC) $(FLAG) $(ARVORE_RUMBRO_NEGRA_COD) $(QUEUE_NEGRA) -o $(BIN_DIR)/arvorerumbro
+#	./verificar.sh
+#	./$(BIN_DIR)/arvorerumbro
 
 $(QUEUE_NEGRA): $(COD_DIR)/arvores/Queue_negra.h
 	$(CC) -c $(COD_DIR)/arvores/Queue_negra.c -o $(QUEUE_NEGRA)
@@ -88,7 +93,6 @@ $(ARVORE_AVL_OBJ): $(ARVORE_AVL_COD) $(ARVORE_AVL_HEADER)
 $(DIRETORIOS):
 	@mkdir $(OBJ_DIR)
 	@mkdir $(BIN_DIR)
-
 
 clean:
 	rm $(OBJ_DIR)/*.o
