@@ -26,7 +26,7 @@ HASH_HEADER = $(COD_DIR)/hash.h
 HASH_BIN = 
 
 TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
- 
+JOGO-DA-VELHA = ./codigo-fonte/jogos/jogo-da-velha.c
 
 ## Ainda em produção
 
@@ -35,6 +35,12 @@ TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
 ##	$(CC) $(FLANG) -o ./bin/terminal ./codigo-fonte/autonomo/terminal.c -lSDL3 -lSDL3_ttf
 ##	./bin/terminal
 ##	./verificar.sh
+jogo-da-velha: $(DIRETORIOS)
+
+	$(CC) $(FLAG) $(JOGO-DA-VELHA) -o ./bin/jogo-da-velha -lncurses
+	./bin/jogo-da-velha
+	./verificar.sh
+
 
 tetris: $(DIRETORIOS) 
 

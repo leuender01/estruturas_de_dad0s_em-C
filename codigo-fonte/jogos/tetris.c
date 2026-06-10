@@ -1,12 +1,8 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <ncurses.h>
-#include <inttypes.h>
-//#include <unistd.h>
 
 #include "tetris.h"
-// #include "cor.h"
 
 long point = 0;
 const MODELO BLOCOS[] = {
