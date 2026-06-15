@@ -27,6 +27,8 @@ HASH_BIN =
 
 TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
 JOGO-DA-VELHA = ./codigo-fonte/jogos/jogo-da-velha.c
+DOCKERVIL = ./codigo-fonte/autonomo/dockervil.c
+
 
 ## Ainda em produção
 
@@ -35,6 +37,12 @@ JOGO-DA-VELHA = ./codigo-fonte/jogos/jogo-da-velha.c
 ##	$(CC) $(FLANG) -o ./bin/terminal ./codigo-fonte/autonomo/terminal.c -lSDL3 -lSDL3_ttf
 ##	./bin/terminal
 ##	./verificar.sh
+dockervil: $(DIRETORIOS)
+
+	$(CC) $(FLAG) $(DOCKERVIL) -o  ./bin/dockervil -lncurses
+	./bin/dockervil
+	./verificar.sh
+
 jogo-da-velha: $(DIRETORIOS)
 
 	$(CC) $(FLAG) $(JOGO-DA-VELHA) -o ./bin/jogo-da-velha -lncurses
