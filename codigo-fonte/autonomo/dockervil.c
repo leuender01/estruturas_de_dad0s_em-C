@@ -8,6 +8,16 @@
 
 #define MAX 100
 
+const char decorations[6][22] =
+{
+    {' ',' ',' ','#','#','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','>'},    
+    {' ',' ','#',' ',' ','*','*','*',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','>'},    
+    {' ','#',' ',' ','*',' ',' ',' ',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ','>'},    
+    {' ','#',' ',' ','*',' ',' ',' ',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ','>'},    
+    {' ',' ','#',' ',' ','*','*','*',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','>'},    
+    {' ',' ',' ','#','#','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','>'},    
+};
+
 struct cabeca 
 {
     char *ports,
@@ -62,18 +72,57 @@ void limpar(void){
 }
 void print(CONTAINERS lista, int *indice)
 {
-    attron(COLOR_PAIR(2));
-    mvprintw(0 , 0, "%s", "============CONTAINERS ATIVOS==============");
+    const char titulo[] = "|______________[CONTAINERS ATIVOS]__________________|\0";
+
+    attron(A_BOLD);
+    attron(COLOR_PAIR(2));   
+    mvprintw(0 , 0, "%s", titulo);
+    attroff(COLOR_PAIR(2)); 
+    attroff(A_BOLD);
     
-    attroff(COLOR_PAIR(2));
-    attron(COLOR_PAIR(3));
     int step = 0;
     for(int i = 0; i < (*indice); i++)
     {
-        mvprintw(2 + step+i , 0, "%s %s %s\n %s %s %s \n%s", lista[i]->id, lista[i]->image, lista[i]->comand, lista[i]->creat, lista[i]->status, lista[i]->names, lista[i]->ports);
-        step+=3;
+        attron(A_BOLD);
+        attron(COLOR_PAIR(3));
+
+        mvprintw(7 + step+i , (strlen(titulo) / 2) - 1, "[%s]", lista[i]->id);
+        mvprintw(4 + step+i , (strlen(titulo) / 2) - 1, "[%s]", lista[i]->comand);
+        mvprintw(5 + step+i , (strlen(titulo) / 2) - 1, "{%s}", lista[i]->status);
+        mvprintw(6 + step+i , (strlen(titulo) / 2) - 1, "[%s]", lista[i]->creat);
+
+        attroff(COLOR_PAIR(3));
+        attroff(A_BOLD);
+
+        attron(A_BOLD);
+        attron(COLOR_PAIR(4));
+
+        mvprintw(2 + step+i , (strlen(titulo) / 2) - 1, "$%s", lista[i]->image);
+        mvprintw(3 + step+i , (strlen(titulo) /2) - 1, "$%s", lista[i]->names);
+        mvprintw(8 + step+i , strlen(titulo) - strlen(lista[i]->ports), "%s", lista[i]->ports); 
+
+        attroff(COLOR_PAIR(4));
+        attroff(A_BOLD);
+        
+
+
+        for(int j = 0; j < 6; j++){
+            for(int a = 0; a < 22; a++){
+                if(decorations[j][a] == ' ') attron(COLOR_PAIR(1));
+                else if(decorations[j][a] == '*') attron(COLOR_PAIR(5));
+                else if(decorations[j][a] == '#') attron(COLOR_PAIR(6));
+                attron(A_BOLD);
+                mvprintw(2 + step + i + j, 2 + a, "%c",decorations[j][a]);
+               
+                attroff(COLOR_PAIR(1));
+                attroff(COLOR_PAIR(5));
+            }
+        }
+
+
+
+        step+=7;
     }
-    attroff(COLOR_PAIR(3));
 }
 
 void inicializar(void)
@@ -82,12 +131,15 @@ void inicializar(void)
     
     start_color(); // inicializa as cores
     init_pair(1, COLOR_BLACK, COLOR_BLACK);  // Texto(Branco) | Fundo(Azul)
-    init_pair(2, COLOR_BLACK, COLOR_CYAN); // Texto(Vermelho) | Fundo(Branco)
-    init_pair(3, COLOR_BLACK, COLOR_GREEN);  // Texto(Azul) | Fundo(Branco)
-    init_pair(4, COLOR_BLUE, COLOR_BLACK);   // Texto(Azul) | Fundo(Branco)
-
+    init_pair(2, COLOR_CYAN, COLOR_BLACK); // Texto(Vermelho) | Fundo(Branco)
+    init_pair(3, COLOR_GREEN, COLOR_BLACK);  // Texto(Azul) | Fundo(Branco)
+    init_pair(4, COLOR_RED, COLOR_BLACK);   // Texto(Azul) | Fundo(Branco)
+    init_pair(5, COLOR_WHITE, COLOR_BLACK);   // Texto(Azul) | Fundo(Branco)
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);   // Texto(Azul) | Fundo(Branco)
+                                              //
     bkgd(COLOR_PAIR(1));
     noecho();
+    curs_set(0);
     timeout(1000);
     keypad(stdscr, TRUE);
 }
