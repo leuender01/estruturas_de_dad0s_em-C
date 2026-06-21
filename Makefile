@@ -28,7 +28,7 @@ HASH_BIN =
 TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
 JOGO-DA-VELHA = ./codigo-fonte/jogos/jogo-da-velha.c
 DOCKERVIL = ./codigo-fonte/autonomo/dockervil.c
-
+LIVE_SERVE = ./codigo-fonte/autonomo/servidor.c
 
 ## Ainda em produção
 
@@ -37,6 +37,11 @@ DOCKERVIL = ./codigo-fonte/autonomo/dockervil.c
 ##	$(CC) $(FLANG) -o ./bin/terminal ./codigo-fonte/autonomo/terminal.c -lSDL3 -lSDL3_ttf
 ##	./bin/terminal
 ##	./verificar.sh
+live_serve: $(DIRETORIOS)
+
+	$(CC) $(FLAG) $(LIVE_SERVE) -o ./bin/live_serve -pthread -lcrypto
+	./verificar.sh
+
 dockervil: $(DIRETORIOS)
 
 	$(CC) $(FLAG) $(DOCKERVIL) -o  ./bin/dockervil -lncurses
