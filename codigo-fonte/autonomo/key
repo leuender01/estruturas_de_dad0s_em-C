@@ -1,0 +1,5 @@
+<digite a chave de ativação gerado no Google senha app
+exemplo "\0meu-email@gmail.com\<senha-gerada>"
+formate em base64 por exemplo no linux use o comado:
+"echo -ne "\0meu-email@gmail.com\<senha-gerada>" | base64"
+apague toda essa linha e coloque a string gerada aqui>

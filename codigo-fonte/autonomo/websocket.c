@@ -15,8 +15,6 @@
 
 void calcular_chave_websocket(const char *key, char *output);
 
-
-
 int main(void)
 {
     int ws_socket_fd, connection_fd;
@@ -41,10 +39,13 @@ int main(void)
 
     while(1) {
         connection_fd = accept(ws_socket_fd, (struct sockaddr*)&client, &client_size);
-        
+        if(connection_fd < 0) continue;        
+
+
         memset(input, 0, sizeof(input));
         read(connection_fd, input, sizeof(input) - 1);
         char *key_start = strstr(input, "Sec-WebSocket-Key: ");
+        printf("%s",input);
         if(key_start != NULL){
             key_start += 19; 
             
@@ -67,16 +68,34 @@ int main(void)
             printf("[WS] Chave Base64 gerada: '%s'\n", chave_aceita);
             char response[1024];
             memset(response, 0, sizeof(response));
-            
-            
+                
             strcat(response, "HTTP/1.1 101 Switching Protocols\r\n");
             strcat(response, "Upgrade: websocket\r\n");
-            strcat(response, "Connection: Upgrade\r\n");
-            sprintf(response + strlen(response), "Sec-WebSocket-Accept: %s\r\n\r\n", chave_aceita);
-            write(connection_fd, response, strlen(response));            
- 
+            write(connection_fd, response, strlen(response));  
+            char temp_buffer[128];
             printf("[WS] Conexão aceita e mantida aberta!\n\n");
-      
+            while(1)
+            {
+                ssize_t bytes_lidos = read(connection_fd, temp_buffer, sizeof(temp_buffer));        
+                if(bytes_lidos > 0)
+                {
+
+                    if((unsigned char)temp_buffer[0] == 0x80)
+                    {
+                        printf("[WS] Cliente enviou comando de encerramento do protocolo.\n");
+                        break;
+                    }
+                }else if(bytes_lidos == 0)
+                {
+                    printf("[WS] Cliente fechou a conexão abruptamente (Aba fechada / F5).\n");
+                    break;
+                }else
+                {
+                    printf("[WS] Erro ou perda de conexão detectada.\n");
+                    break;
+                }
+
+            } 
         } else {
             printf("[WS] Requisição inválida recebida na porta %d (Falta a chave).\n", WS_PORT);
             close(connection_fd);
