@@ -8,3 +8,6 @@
 /bin
 /objects
 *.s
+*.html
+*.js
+*.css

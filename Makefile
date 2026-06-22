@@ -28,7 +28,7 @@ HASH_BIN =
 TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
 JOGO-DA-VELHA = ./codigo-fonte/jogos/jogo-da-velha.c
 DOCKERVIL = ./codigo-fonte/autonomo/dockervil.c
-LIVE_SERVE = ./codigo-fonte/autonomo/servidor.c
+LIVE_SERVE = ./codigo-fonte/autonomo/live_reload.c
 
 ## Ainda em produção
 

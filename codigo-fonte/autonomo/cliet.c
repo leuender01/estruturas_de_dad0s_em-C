@@ -25,7 +25,7 @@ int main(void)
     printf("Socket criado\n");
 
     target.sin_family = AF_INET;
-    target.sin_port = htons(3001);
+    target.sin_port = htons(25);
     inet_aton("127.0.0.1", &(target.sin_addr));
     printf("Tentando conectar\n");
     if (connect(socket_fd, (struct sockaddr*)&target, sizeof(target)) != 0) {
@@ -35,7 +35,7 @@ int main(void)
     printf("Conectei ao servidor\n");
 
     /* Agora, meu socket funciona como um descritor de arquivo usual */
-    send(socket_fd, "PaNG", 5, 0);
+    send(socket_fd, "PONG", 5, 0);
     printf("Escrevi mensagem de ping!\n");
 
     /* Recebendo resposta */
