@@ -28,6 +28,7 @@ HASH_BIN =
 TETRIS_JOGO = ./codigo-fonte/jogos/tetris.c
 JOGO-DA-VELHA = ./codigo-fonte/jogos/jogo-da-velha.c
 DOCKERVIL = ./codigo-fonte/autonomo/dockervil.c
+SNAKE = ./codigo-fonte/jogos/snake.c
 LIVE_SERVE = ./codigo-fonte/autonomo/live_serve.c
 
 ## Ainda em produção
@@ -37,6 +38,11 @@ LIVE_SERVE = ./codigo-fonte/autonomo/live_serve.c
 ##	$(CC) $(FLANG) -o ./bin/terminal ./codigo-fonte/autonomo/terminal.c -lSDL3 -lSDL3_ttf
 ##	./bin/terminal
 ##	./verificar.sh
+snake: $(DIRETORIOS)
+
+	$(CC) $(FLAG) $(SNAKE) -o ./bin/snake -lncurses
+	./verificar.sh
+
 live_serve: $(DIRETORIOS)
 
 	$(CC) $(FLAG) $(LIVE_SERVE) -o ./bin/live_serve -pthread -lcrypto
@@ -71,17 +77,13 @@ tetris: $(DIRETORIOS)
 $(QUEUE_NEGRA): $(COD_DIR)/arvores/Queue_negra.h
 	$(CC) -c $(COD_DIR)/arvores/Queue_negra.c -o $(QUEUE_NEGRA)
 
-
 hash: $(DIRETORIOS)  $(HASH_HEADER)  
 	
 	$(CC) $(FLAG) $(HASH_COD) -o $(BIN_DIR)/hash
 	./verificar.sh
 	./$(BIN_DIR)/hash
 
-
-
 ##------------------ALGORITIMO_MERGE_SORT-------------
-
 
 merge_sort: $(DIRETORIOS) $(MERGE_SORT_OBJ) 
 	$(CC) $(FLAG)  $(MERGE_SORT_OBJ) $(COD_DIR)/algoritimos_ordenação/teste_merge.c -o $(BIN_DIR)/merge_sort
@@ -91,8 +93,6 @@ merge_sort: $(DIRETORIOS) $(MERGE_SORT_OBJ)
 $(MERGE_SORT_OBJ):
 	@mkdir -p $(OBJ_DIR)
 	$(CC) -c $(MERGE_SORT_COD) -o $(MERGE_SORT_OBJ)
-
-
 
 ##--------------------aRVORE_AVL-----------------------
 arvore_avl: $(DIRETORIOS) $(ARVORE_AVL_OBJ) 
@@ -106,8 +106,6 @@ $(ARVORE_AVL_OBJ): $(ARVORE_AVL_COD) $(ARVORE_AVL_HEADER)
 	$(CC) -c $(COD_DIR)/arvores/arvore-binaria-de-busca.c -o  $(OBJ_DIR)/arvore-binaria-de-busca.o
 	$(CC) -c $(COD_DIR)/arvores/arvore-de-busca-AVL.c -o  $(OBJ_DIR)/arvore-de-busca-AVL.o
 	$(CC) -c $(COD_DIR)/Queue.c -o  $(OBJ_DIR)/Queue.o
-
-
 
 $(DIRETORIOS):
 	@mkdir $(OBJ_DIR)

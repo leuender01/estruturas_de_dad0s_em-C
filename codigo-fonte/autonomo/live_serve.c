@@ -22,7 +22,6 @@ const char resposta101[] = "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websock
 const int ws_port = 8082;
 const int http_port = 8081;
 const char ws_frame[8] = {0x81, 0x06, 'r','e','l','o','a','d'};
-
 volatile int rodando = 1;
 volatile int flag = -1;
 
