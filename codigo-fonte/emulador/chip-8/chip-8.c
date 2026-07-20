@@ -69,8 +69,15 @@ int main(int argc, char *argv[]){
     };
     bool rodando = true;
     SDL_Event evento;
+    uint64_t tempo_anterior_cpu = SDL_GetTicks();
+    uint64_t tempo_anterior_timers = SDL_GetTicks();
+
+    const uint64_t MS_POR_CICLO_CPU = 2;
+    const uint64_t MS_POR_DECREMENTO_TIMER = 16;
+
     while(rodando)
     {
+        uint64_t tempo_atual = SDL_GetTicks();
         while (SDL_PollEvent(&evento)) {
             if (evento.type == SDL_EVENT_QUIT) {
                 rodando = false;
@@ -88,7 +95,18 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-        chip8_cyrcle(&cpu, fd);
+        if (tempo_atual - tempo_anterior_cpu >= MS_POR_CICLO_CPU) {
+            chip8_cyrcle(&cpu, fd);
+            tempo_anterior_cpu = tempo_atual;
+        }
+
+        if (tempo_atual - tempo_anterior_timers >= MS_POR_DECREMENTO_TIMER) {
+            if (cpu.delay_timer > 0) cpu.delay_timer--;
+            if (cpu.sound_timer > 0) cpu.sound_timer--;
+            tempo_anterior_timers = tempo_atual;
+        }
+
+
         if(draw == 1)
         {
             SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
@@ -379,9 +397,7 @@ kk constante de 8-bits [binario: %0b hexadecimal: %0x numero inteiro: %u]\n\r",
             fprintf(fd,"instrução: %0x nao\033[33mexecultada\033[0m\n", opcode);
             break;
     }
-    if(cpu->delay_timer > 0) cpu->delay_timer--;
-    if(cpu->sound_timer > 0) cpu->sound_timer--;
-   }
+}
 
 uint8_t map_sdl_key(SDL_Keycode key) {
     switch (key) {
